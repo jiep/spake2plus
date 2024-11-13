@@ -1,7 +1,8 @@
 from tinyec import registry
 from tinyec.ec import Point
+from cryptography.hazmat.primitives import hashes
 
-from spake2plus import *
+from spake2plus import Protocol, GlobalParameters
 
 
 def main():
