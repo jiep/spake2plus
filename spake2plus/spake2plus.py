@@ -52,7 +52,7 @@ class Party:
         self.w0 = w0
         self.w1 = w1
         self.params = params
-        self.L = int.from_bytes(self.w1c) * self.params.P
+        self.L = int.from_bytes(self.w1, byteorder="big") * self.params.P
         self.context = context
 
     def shared_key(self):
