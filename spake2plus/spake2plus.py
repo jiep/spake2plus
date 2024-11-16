@@ -4,9 +4,27 @@ import secrets
 
 from spake2plus.utils import encode_point_uncompressed, mac, get_len
 
+class GlobalParameters:
+    def __init__(self, M, N, h, curve, hash, mac, kdf, length):
+        self.M = M
+        self.N = N
+        self.P = curve.g
+        self.h = h
+        self.curve = curve
+        self.hash = hash
+        self.mac = mac
+        self.kdf = kdf
+        self.length = length
+
+class ConfirmingError(Exception):
+    pass
+
+class InvalidInputError(Exception):
+    pass
+
 
 class Protocol:
-    def __init__(self, params, idProver, idVerifier, w0, w1, context, x, y):
+    def __init__(self, params: GlobalParameters, idProver: bytes, idVerifier: bytes, w0: bytes, w1: bytes, context: bytes, x: bytes, y: bytes):
         self.params = params
         self.idProver = idProver
         self.idVerifier = idVerifier
@@ -30,19 +48,8 @@ class Protocol:
         if not self.prover.check(confirmVV, confirmPV) or not self.verifier.check(
             confirmVP, confirmPP
         ):
-            raise "error confirming"
+            raise ConfirmingError("error confirming")
 
-class GlobalParameters:
-    def __init__(self, M, N, h, curve, hash, mac, kdf, length):
-        self.M = M
-        self.N = N
-        self.P = curve.g
-        self.h = h
-        self.curve = curve
-        self.hash = hash
-        self.mac = mac
-        self.kdf = kdf
-        self.length = length
 
 
 class Party:
@@ -124,15 +131,22 @@ class Prover(Party):
         if not x:
             x = secrets.randbelow(self.params.curve.field.n)
         self.x = x
-        self.X = self.x * self.params.P + int.from_bytes(self.w0, byteorder="big") * self.params.M
+        self.X = (
+            self.x * self.params.P
+            + int.from_bytes(self.w0, byteorder="big") * self.params.M
+        )
         return self.X
 
     def finish(self, Y):
         if not Y.on_curve:
-            raise "invalid input"
+            raise InvalidInputError("invalid input")
 
         self.Y = Y
-        self.Z = self.params.h * self.x * (Y - int.from_bytes(self.w0, byteorder="big") * self.params.N)
+        self.Z = (
+            self.params.h
+            * self.x
+            * (Y - int.from_bytes(self.w0, byteorder="big") * self.params.N)
+        )
         self.V = (
             self.params.h
             * int.from_bytes(self.w1, byteorder="big")
@@ -146,13 +160,18 @@ class Verifier(Party):
             y = secrets.randbelow(self.params.curve.field.n)
 
         if not X.on_curve:
-            raise "invalid input"
+            raise InvalidInputError("invalid input")
 
         self.y = y
         self.X = X
-        self.Y = self.y * self.params.P + int.from_bytes(self.w0, byteorder="big") * self.params.N
+        self.Y = (
+            self.y * self.params.P
+            + int.from_bytes(self.w0, byteorder="big") * self.params.N
+        )
         self.Z = (
-            self.params.h * self.y * (self.X - int.from_bytes(self.w0, byteorder="big") * self.params.M)
+            self.params.h
+            * self.y
+            * (self.X - int.from_bytes(self.w0, byteorder="big") * self.params.M)
         )
         self.V = self.params.h * self.y * self.L
 
