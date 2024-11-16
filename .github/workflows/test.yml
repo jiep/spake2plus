@@ -20,7 +20,19 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run tests
-      run: pytest
+      run: pytest --junit-xml=test-results.xml
 
-    - name: Run coverage
-      run: pytest --cov=spake2plus
+    - name: Surface failing tests
+      if: always()
+      uses: pmeier/pytest-results-action@0.7.1
+      with:
+        
+        path: test-results.xml
+
+        summary: true
+
+        display-options: fEX
+
+        fail-on-empty: true
+
+        title: Test results

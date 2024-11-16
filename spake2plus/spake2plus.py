@@ -30,11 +30,7 @@ class Protocol:
         if not self.prover.check(confirmVV, confirmPV) or not self.verifier.check(
             confirmVP, confirmPP
         ):
-            print("Error")
-
-        print(self.verifier.shared_key().hex())
-        print(self.prover.shared_key().hex())
-
+            raise "error confirming"
 
 class GlobalParameters:
     def __init__(self, M, N, h, curve, hash, mac, kdf, length):
@@ -124,11 +120,9 @@ class Party:
 
 
 class Prover(Party):
-    x: bytes
-
     def init(self, x):
         if not x:
-            x = secrets.randbelow(self.curve.field.n)
+            x = secrets.randbelow(self.params.curve.field.n)
         self.x = x
         self.X = self.x * self.params.P + int.from_bytes(self.w0) * self.params.M
         return self.X
@@ -147,11 +141,9 @@ class Prover(Party):
 
 
 class Verifier(Party):
-    y: bytes
-
     def finish(self, X, y):
         if not y:
-            y = secrets.randbelow(self.curve.field.n)
+            y = secrets.randbelow(self.params.curve.field.n)
 
         if not X.on_curve:
             raise "invalid input"

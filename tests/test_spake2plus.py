@@ -1,7 +1,7 @@
 from tinyec import registry
 from tinyec.ec import Point
 from cryptography.hazmat.primitives import hashes
-from spake2plus.spake2plus import Protocol, GlobalParameters
+from spake2plus.spake2plus import Protocol, GlobalParameters, Prover, Verifier
 
 
 def test_p256():
@@ -232,3 +232,44 @@ def test_p521():
 
     assert protocol.prover.shared_key().hex() == K_shared
     assert protocol.verifier.shared_key().hex() == K_shared
+
+
+def test_random():
+    context = b"SPAKE2+-P256-SHA256-HKDF-SHA256-HMAC-SHA256 Random Values"
+    idProver = b"alice"
+    idVerifier = b"bob"
+    w0 = "bb8e1bbcf3c48f62c08db243652ae55d3e5586053fca77102994f23ad95491b3"
+    w1 = "7e945f34d78785b8a3ef44d0df5a1a97d6b3b460409a345ca7830387a74b1dba"
+    x = None
+    y = None
+    M = "02886e2f97ace46e55ba9dd7242579f2993b64e16ef3dcab95afd497333d8fa12f"
+    N = "03d8bbd6c639c62937b04d997f38c3770719c629d7014d49a24b4f98baa1292b49"
+
+    w0 = bytes.fromhex(w0)
+    w1 = bytes.fromhex(w1)
+
+    curve = registry.get_curve("secp256r1")
+
+    M = Point(
+        curve,
+        61709229055687782219344352628424647386531596507379261315813478518843566432559,
+        43399651700267013692148409492066214468674361939146464406474584691695279811872,
+    )
+    N = Point(
+        curve,
+        98031458012971070369465795029179261841266230867477002166417845678366165379913,
+        3544368724946236282841049099645644789675854804295951046212527731618188549095,
+    )
+
+    h = 1
+
+    length = 32
+
+    hash = hashes.SHA256()
+    mac = hashes.SHA256()
+    kdf = hashes.SHA256()
+
+    params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
+    protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
+
+    assert protocol.prover.shared_key().hex() == protocol.verifier.shared_key().hex()
