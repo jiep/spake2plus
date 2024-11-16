@@ -29,9 +29,9 @@ jobs:
         pytest -v --md-report --md-report-flavor gfm --md-report-exclude-outcomes passed skipped xpassed --md-report-output "$REPORT_OUTPUT"
 
     - name: Render the report to the PR when tests fail
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: always()
-        with:
-          header: test-report
-          recreate: true
-          path: ${{ env.REPORT_FILE }}
+      uses: marocchino/sticky-pull-request-comment@v2
+      if: always()
+      with:
+        header: test-report
+        recreate: true
+        path: ${{ env.REPORT_FILE }}
