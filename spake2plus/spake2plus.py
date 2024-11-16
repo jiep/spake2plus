@@ -1,7 +1,8 @@
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+from cryptography.hazmat.primitives import hashes
 import secrets
 
-from utils import *
+from spake2plus.utils import encode_point_uncompressed, mac, get_len
 
 
 class Protocol:
@@ -13,30 +14,30 @@ class Protocol:
         print(
             f"Running SPAKE2+ with curve {self.params.curve.name}, {self.params.hash.name.split('.')[-1].upper()}, HKDF-{self.params.kdf.name.split('.')[-1].upper()} and HMAC-{self.params.mac.name.split('.')[-1].upper()}"
         )
-        prover = Prover(idProver, idVerifier, w0, w1, context, params)
-        verifier = Verifier(idProver, idVerifier, w0, w1, context, params)
+        self.prover = Prover(idProver, idVerifier, w0, w1, context, params)
+        self.verifier = Verifier(idProver, idVerifier, w0, w1, context, params)
 
-        X = prover.init(x)
-        Y = verifier.finish(X, y)
+        X = self.prover.init(x)
+        Y = self.verifier.finish(X, y)
 
-        prover.finish(Y)
-        prover.compute_key_schedule()
-        verifier.compute_key_schedule()
+        self.prover.finish(Y)
+        self.prover.compute_key_schedule()
+        self.verifier.compute_key_schedule()
 
-        confirmVV, confirmPV = verifier.confirm()
-        confirmVP, confirmPP = prover.confirm()
+        confirmVV, confirmPV = self.verifier.confirm()
+        confirmVP, confirmPP = self.prover.confirm()
 
-        if not prover.check(confirmVV, confirmPV) or not verifier.check(
+        if not self.prover.check(confirmVV, confirmPV) or not self.verifier.check(
             confirmVP, confirmPP
         ):
             print("Error")
 
-        print(verifier.shared_key().hex())
-        print(prover.shared_key().hex())
+        print(self.verifier.shared_key().hex())
+        print(self.prover.shared_key().hex())
 
 
 class GlobalParameters:
-    def __init__(self, M, N, h, curve, hash, mac, kdf):
+    def __init__(self, M, N, h, curve, hash, mac, kdf, length):
         self.M = M
         self.N = N
         self.P = curve.g
@@ -45,6 +46,7 @@ class GlobalParameters:
         self.hash = hash
         self.mac = mac
         self.kdf = kdf
+        self.length = length
 
 
 class Party:
@@ -90,12 +92,12 @@ class Party:
         h.update(self.TT)
         K_main = h.finalize()
         K_confirm = HKDF(
-            algorithm=self.params.kdf, length=64, salt=None, info=b"ConfirmationKeys"
+            algorithm=self.params.kdf, length=2*self.params.length, salt=None, info=b"ConfirmationKeys"
         ).derive(K_main)
-        self.K_confirmP = K_confirm[:32]
-        self.K_confirmV = K_confirm[32:]
+        self.K_confirmP = K_confirm[:self.params.length]
+        self.K_confirmV = K_confirm[self.params.length:]
         self.K_shared = HKDF(
-            algorithm=self.params.kdf, length=32, salt=None, info=b"SharedKey"
+            algorithm=self.params.kdf, length=self.params.length, salt=None, info=b"SharedKey"
         ).derive(K_main)
 
     def confirm(self):
