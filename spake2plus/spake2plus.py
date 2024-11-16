@@ -52,7 +52,7 @@ class Party:
         self.w0 = w0
         self.w1 = w1
         self.params = params
-        self.L = int.from_bytes(self.w1) * self.params.P
+        self.L = int.from_bytes(self.w1c) * self.params.P
         self.context = context
 
     def shared_key(self):
@@ -124,7 +124,7 @@ class Prover(Party):
         if not x:
             x = secrets.randbelow(self.params.curve.field.n)
         self.x = x
-        self.X = self.x * self.params.P + int.from_bytes(self.w0) * self.params.M
+        self.X = self.x * self.params.P + int.from_bytes(self.w0, byteorder="big") * self.params.M
         return self.X
 
     def finish(self, Y):
@@ -132,11 +132,11 @@ class Prover(Party):
             raise "invalid input"
 
         self.Y = Y
-        self.Z = self.params.h * self.x * (Y - int.from_bytes(self.w0) * self.params.N)
+        self.Z = self.params.h * self.x * (Y - int.from_bytes(self.w0, byteorder="big") * self.params.N)
         self.V = (
             self.params.h
-            * int.from_bytes(self.w1)
-            * (Y - int.from_bytes(self.w0) * self.params.N)
+            * int.from_bytes(self.w1, byteorder="big")
+            * (Y - int.from_bytes(self.w0, byteorder="big") * self.params.N)
         )
 
 
@@ -150,9 +150,9 @@ class Verifier(Party):
 
         self.y = y
         self.X = X
-        self.Y = self.y * self.params.P + int.from_bytes(self.w0) * self.params.N
+        self.Y = self.y * self.params.P + int.from_bytes(self.w0, byteorder="big") * self.params.N
         self.Z = (
-            self.params.h * self.y * (self.X - int.from_bytes(self.w0) * self.params.M)
+            self.params.h * self.y * (self.X - int.from_bytes(self.w0, byteorder="big") * self.params.M)
         )
         self.V = self.params.h * self.y * self.L
 
