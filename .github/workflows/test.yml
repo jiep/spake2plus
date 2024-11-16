@@ -22,7 +22,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run pytest
-      uses: quantco/pytest-action@v3
+      uses: quantco/pytest-action@v2
       with:
         verbose: true
         emoji: true
