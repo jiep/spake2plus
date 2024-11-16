@@ -92,12 +92,18 @@ class Party:
         h.update(self.TT)
         K_main = h.finalize()
         K_confirm = HKDF(
-            algorithm=self.params.kdf, length=2*self.params.length, salt=None, info=b"ConfirmationKeys"
+            algorithm=self.params.kdf,
+            length=2 * self.params.length,
+            salt=None,
+            info=b"ConfirmationKeys",
         ).derive(K_main)
-        self.K_confirmP = K_confirm[:self.params.length]
-        self.K_confirmV = K_confirm[self.params.length:]
+        self.K_confirmP = K_confirm[: self.params.length]
+        self.K_confirmV = K_confirm[self.params.length :]
         self.K_shared = HKDF(
-            algorithm=self.params.kdf, length=self.params.length, salt=None, info=b"SharedKey"
+            algorithm=self.params.kdf,
+            length=self.params.length,
+            salt=None,
+            info=b"SharedKey",
         ).derive(K_main)
 
     def confirm(self):

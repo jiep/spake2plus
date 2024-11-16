@@ -46,9 +46,8 @@ def test_p256():
     params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
     protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
 
-    assert(protocol.prover.shared_key().hex() == K_shared)
-    assert(protocol.verifier.shared_key().hex() == K_shared) 
-
+    assert protocol.prover.shared_key().hex() == K_shared
+    assert protocol.verifier.shared_key().hex() == K_shared
 
 
 def test_p256_2():
@@ -93,8 +92,8 @@ def test_p256_2():
     params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
     protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
 
-    assert(protocol.prover.shared_key().hex() == K_shared)
-    assert(protocol.verifier.shared_key().hex() == K_shared)
+    assert protocol.prover.shared_key().hex() == K_shared
+    assert protocol.verifier.shared_key().hex() == K_shared
 
 
 def test_p384():
@@ -139,8 +138,9 @@ def test_p384():
     params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
     protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
 
-    assert(protocol.prover.shared_key().hex() == K_shared)
-    assert(protocol.verifier.shared_key().hex() == K_shared) 
+    assert protocol.prover.shared_key().hex() == K_shared
+    assert protocol.verifier.shared_key().hex() == K_shared
+
 
 def test_p384_2():
     context = b"SPAKE2+-P384-SHA512-HKDF-SHA512-HMAC-SHA512 Test Vectors"
@@ -184,8 +184,8 @@ def test_p384_2():
     params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
     protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
 
-    assert(protocol.prover.shared_key().hex() == K_shared)
-    assert(protocol.verifier.shared_key().hex() == K_shared) 
+    assert protocol.prover.shared_key().hex() == K_shared
+    assert protocol.verifier.shared_key().hex() == K_shared
 
 
 def test_p521():
@@ -230,5 +230,5 @@ def test_p521():
     params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
     protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
 
-    assert(protocol.prover.shared_key().hex() == K_shared)
-    assert(protocol.verifier.shared_key().hex() == K_shared) 
+    assert protocol.prover.shared_key().hex() == K_shared
+    assert protocol.verifier.shared_key().hex() == K_shared
