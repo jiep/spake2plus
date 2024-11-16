@@ -21,18 +21,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run tests
-      env:
-        REPORT_OUTPUT: md_report.md
-      shell: bash
-      run: |
-        echo "REPORT_FILE=${REPORT_OUTPUT}" >> "$GITHUB_ENV"
-        pytest -v --md-report --md-report-flavor gfm --md-report-exclude-outcomes passed skipped xpassed --md-report-output "$REPORT_OUTPUT"
-    
-    - name: Render the report to the PR when tests fail
-      uses: marocchino/sticky-pull-request-comment@v2
-      if: failure()
+    - name: Run pytest
+      uses: quantco/pytest-action@v3
       with:
-        header: test-report
-        recreate: true
-        path: ${{ env.REPORT_FILE }}
+        verbose: true
+        emoji: true
+        job-summary: true
+        custom-arguments: '-q'
+        click-to-expand: true
+        report-title: 'Test Report'

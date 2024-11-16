@@ -3,6 +3,6 @@ tinyec==0.4.0
 
 # dev
 pytest==8.3.3
+pytest-emoji==0.2.0
+pytest-md==0.2.0
 black==24.10.0
-pytest_cov==6.0.0
-pytest-md-report==0.6.2

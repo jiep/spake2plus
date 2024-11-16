@@ -272,4 +272,4 @@ def test_random():
     params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
     protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
 
-    assert protocol.prover.shared_key().hex() != protocol.verifier.shared_key().hex()
+    assert protocol.prover.shared_key().hex() == protocol.verifier.shared_key().hex()
