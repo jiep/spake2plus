@@ -31,7 +31,7 @@ jobs:
       run: python -m build
 
     - name: Upload Wheel as artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: wheel-package
         path: dist/*
