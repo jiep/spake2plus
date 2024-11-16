@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spake2plus"
+authors = [
+    {name = "José Ignacio Escribano"},
+]
+description = "A simple implementation of SPAKE2+ protocol"
+requires-python = ">=3.11"
+keywords = ["cryptography", "spake2plus"]
+license = {file = "LICENSE"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Security",
+    "Topic :: Security :: Cryptography"
+]
+dynamic = ["dependencies", "version", "readme"]
+[tool.setuptools.dynamic]
+version = {attr = "spake2plus.__version__"}
+dependencies = {file = ["requirements.txt"]}
+readme = {file = ["README.md"]}
