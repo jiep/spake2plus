@@ -4,6 +4,7 @@ import secrets
 
 from spake2plus.utils import encode_point_uncompressed, mac, get_len
 
+
 class GlobalParameters:
     def __init__(self, M, N, h, curve, hash, mac, kdf, length):
         self.M = M
@@ -16,15 +17,27 @@ class GlobalParameters:
         self.kdf = kdf
         self.length = length
 
+
 class ConfirmingError(Exception):
     pass
+
 
 class InvalidInputError(Exception):
     pass
 
 
 class Protocol:
-    def __init__(self, params: GlobalParameters, idProver: bytes, idVerifier: bytes, w0: bytes, w1: bytes, context: bytes, x: bytes, y: bytes):
+    def __init__(
+        self,
+        params: GlobalParameters,
+        idProver: bytes,
+        idVerifier: bytes,
+        w0: bytes,
+        w1: bytes,
+        context: bytes,
+        x: bytes,
+        y: bytes,
+    ):
         self.params = params
         self.idProver = idProver
         self.idVerifier = idVerifier
@@ -49,7 +62,6 @@ class Protocol:
             confirmVP, confirmPP
         ):
             raise ConfirmingError("error confirming")
-
 
 
 class Party:
