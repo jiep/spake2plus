@@ -20,6 +20,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
     - name: Run tests
       env:
         REPORT_OUTPUT: md_report.md
@@ -27,7 +28,7 @@ jobs:
       run: |
         echo "REPORT_FILE=${REPORT_OUTPUT}" >> "$GITHUB_ENV"
         pytest -v --md-report --md-report-flavor gfm --md-report-exclude-outcomes passed skipped xpassed --md-report-output "$REPORT_OUTPUT"
-
+    
     - name: Render the report to the PR when tests fail
       uses: marocchino/sticky-pull-request-comment@v2
       if: always()
