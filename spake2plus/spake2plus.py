@@ -24,9 +24,7 @@ class SPAKE2PLUS:
         self.idProver = idProver
         self.idVerifier = idVerifier
         self.context = context
-        print(
-            f"Running SPAKE2+ with curve {self.params.curve.name}, {self.params.hash.name.split('.')[-1].upper()}, HKDF-{self.params.kdf.name.split('.')[-1].upper()} and HMAC-{self.params.mac.name.split('.')[-1].upper()}"
-        )
+        
         self.prover = Prover(idProver, idVerifier, w0, w1, context, params)
         self.verifier = Verifier(idProver, idVerifier, w0, w1, context, params)
 
