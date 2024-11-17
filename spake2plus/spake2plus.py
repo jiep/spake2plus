@@ -25,8 +25,10 @@ class SPAKE2PLUS:
         self.idVerifier = idVerifier
         self.context = context
 
-        self.prover = Prover(idProver, idVerifier, w0, w1, context, params)
-        self.verifier = Verifier(idProver, idVerifier, w0, w1, context, params)
+        self.prover = Prover(idProver, idVerifier, "1234", "1234".encode(), 1000, context, params)
+        self.prover.set_w0_w1(w0, w1)
+        self.verifier = Verifier(idProver, idVerifier, "1234", "1234".encode(), 1000, context, params)
+        self.verifier.set_w0_w1(w0, w1)
 
         X = self.prover.init(x)
         Y = self.verifier.finish(X, y)

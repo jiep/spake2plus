@@ -20,6 +20,9 @@ def main():
     required.add_argument('--idProver', required=True)
     required.add_argument('--idVerifier', required=True)
     required.add_argument('--context', required=True)
+    required.add_argument('--password', required=True)
+    required.add_argument('--salt', required=True)
+    required.add_argument('--iterations', type=int, default=100000)
     required.add_argument("--ciphersuite", choices=CIPHERSUITES, default=CIPHERSUITES[0])
 
     args = parser.parse_args()
@@ -33,16 +36,10 @@ def main():
         case "P384-SHA512": ciphersuite = CiphersuiteP384_SHA512()
         case "P521-SHA512": ciphersuite = CiphersuiteP521_SHA512()
 
-    w0 = "bb8e1bbcf3c48f62c08db243652ae55d3e5586053fca77102994f23ad95491b3"
-    w1 = "7e945f34d78785b8a3ef44d0df5a1a97d6b3b460409a345ca7830387a74b1dba"
-    w0 = bytes.fromhex(w0)
-    w1 = bytes.fromhex(w1)
-
     match args.role:
         case "prover":
-            prover = Prover(args.idProver.encode(), args.idVerifier.encode(), w0, w1, args.context.encode(), ciphersuite.params)
+            prover = Prover(args.idProver.encode(), args.idVerifier.encode(), args.password, args.salt.encode(), args.iterations, args.context.encode(), ciphersuite.params)
             prover.start()
         case "verifier":
-            verifier = Verifier(args.idProver.encode(), args.idVerifier.encode(), w0, w1, args.context.encode(), ciphersuite.params)
+            verifier = Verifier(args.idProver.encode(), args.idVerifier.encode(), args.password, args.salt.encode(), args.iterations, args.context.encode(), ciphersuite.params)
             verifier.start()
-
