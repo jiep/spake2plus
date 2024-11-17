@@ -67,7 +67,12 @@ spake2plus prover --idProver alice --idVerifier bob --context 1234 --password 12
 
 > [!NOTE]  
 > If not specified ciphersuite, P256-SHA256 is used by default.
-> Ciphersuites allowed: P256-SHA256, P256-SHA512, P384-SHA256, P384-SHA512,and P521-SHA512
+> Ciphersuites allowed: P256-SHA256, P256-SHA512, P384-SHA256, P384-SHA512,and P521-SHA512.
+
+> [!WARNING]  
+> Salt must have a length of 32 bytes at least!
+> `idProvider`, `idVerifier`, `context`, `password`, and `salt` must be the same for `Prover` and `Verifier`! 
+
 
 ## Contributing
 
