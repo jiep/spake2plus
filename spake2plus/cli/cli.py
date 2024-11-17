@@ -2,6 +2,7 @@ import sys
 import argparse
 
 from spake2plus.ciphersuites import (
+    Ciphersuite,
     CiphersuiteP256_SHA256,
     CiphersuiteP256_SHA512,
     CiphersuiteP384_SHA256,
@@ -38,8 +39,6 @@ def main():
     )
 
     args = parser.parse_args()
-
-    ciphersuite: Ciphersuite
 
     match args.ciphersuite:
         case "P256-SHA256":
