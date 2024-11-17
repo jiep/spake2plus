@@ -12,10 +12,12 @@ sequenceDiagram
     participant Verifier
 
     Prover->>Verifier: (registration)
+    Note over Prover: password
+    Note over Verifier: password
     Note over Prover,Verifier: Set up the protocol
-    Prover->>Verifier: shareP (compute shareP)
-    Verifier->>Prover: shareV (compute shareV)
-    Note over Prover,Verifier: Derive secrets
+    Prover->>Verifier: X (compute X)
+    Verifier->>Prover: Y (compute Y)
+    Note over Prover,Verifier: Derive secret key
     Verifier->>Prover: confirmV (compute confirmV)
     Prover->>Verifier: confirmP (compute confirmP)
 ```
