@@ -1,7 +1,10 @@
 from tinyec import registry
 from tinyec.ec import Point
 from cryptography.hazmat.primitives import hashes
-from spake2plus.spake2plus import Protocol, GlobalParameters, Prover, Verifier
+from spake2plus.spake2plus import SPAKE2PLUS
+from spake2plus.parameters import Parameters
+from spake2plus.prover import Prover
+from spake2plus.verifier import Verifier
 
 
 def test_p256():
@@ -43,8 +46,8 @@ def test_p256():
 
     K_shared = "0c5f8ccd1413423a54f6c1fb26ff01534a87f893779c6e68666d772bfd91f3e7"
 
-    params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
-    protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
+    params = Parameters(M, N, h, curve, hash, mac, kdf, length)
+    protocol = SPAKE2PLUS(params, idProver, idVerifier, w0, w1, context, x, y)
 
     assert protocol.prover.shared_key().hex() == K_shared
     assert protocol.verifier.shared_key().hex() == K_shared
@@ -89,8 +92,8 @@ def test_p256_2():
 
     K_shared = "11887659d9e002f34fa6cc270d33570f001b2a3fc0522b643c07327d09a4a9f47aab85813d13c585b53adf5ac9de5707114848f3dc31a4045f69a2cc1972b098"
 
-    params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
-    protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
+    params = Parameters(M, N, h, curve, hash, mac, kdf, length)
+    protocol = SPAKE2PLUS(params, idProver, idVerifier, w0, w1, context, x, y)
 
     assert protocol.prover.shared_key().hex() == K_shared
     assert protocol.verifier.shared_key().hex() == K_shared
@@ -135,8 +138,8 @@ def test_p384():
 
     K_shared = "99758e838ae1a856589689fb55b6befe4e2382e6ebbeca1a6232a68f9dc04c1a"
 
-    params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
-    protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
+    params = Parameters(M, N, h, curve, hash, mac, kdf, length)
+    protocol = SPAKE2PLUS(params, idProver, idVerifier, w0, w1, context, x, y)
 
     assert protocol.prover.shared_key().hex() == K_shared
     assert protocol.verifier.shared_key().hex() == K_shared
@@ -181,8 +184,8 @@ def test_p384_2():
 
     K_shared = "31e0075a823b9269af5769d71ef3b2f5001cbfe044584fe8551124a217dad078415630bf3eda16b5a38341d418a6d72b3960f818a0926f0de88784b59d6a694b"
 
-    params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
-    protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
+    params = Parameters(M, N, h, curve, hash, mac, kdf, length)
+    protocol = SPAKE2PLUS(params, idProver, idVerifier, w0, w1, context, x, y)
 
     assert protocol.prover.shared_key().hex() == K_shared
     assert protocol.verifier.shared_key().hex() == K_shared
@@ -227,8 +230,8 @@ def test_p521():
 
     K_shared = "d1c170e4e55efacb9db8abad286293ebd1dcf24f13973427b9632bbc323e42e447afca2aa7f74f2af3fb5f51684ec543db854b7002cde6799c330b032ba8820a"
 
-    params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
-    protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
+    params = Parameters(M, N, h, curve, hash, mac, kdf, length)
+    protocol = SPAKE2PLUS(params, idProver, idVerifier, w0, w1, context, x, y)
 
     assert protocol.prover.shared_key().hex() == K_shared
     assert protocol.verifier.shared_key().hex() == K_shared
@@ -269,7 +272,7 @@ def test_random():
     mac = hashes.SHA256()
     kdf = hashes.SHA256()
 
-    params = GlobalParameters(M, N, h, curve, hash, mac, kdf, length)
-    protocol = Protocol(params, idProver, idVerifier, w0, w1, context, x, y)
+    params = Parameters(M, N, h, curve, hash, mac, kdf, length)
+    protocol = SPAKE2PLUS(params, idProver, idVerifier, w0, w1, context, x, y)
 
     assert protocol.prover.shared_key().hex() == protocol.verifier.shared_key().hex()
