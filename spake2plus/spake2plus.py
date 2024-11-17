@@ -24,7 +24,7 @@ class SPAKE2PLUS:
         self.idProver = idProver
         self.idVerifier = idVerifier
         self.context = context
-        
+
         self.prover = Prover(idProver, idVerifier, w0, w1, context, params)
         self.verifier = Verifier(idProver, idVerifier, w0, w1, context, params)
 
