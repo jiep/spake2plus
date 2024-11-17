@@ -1,11 +1,14 @@
+from spake2plus.exceptions import InvalidInputError
 from spake2plus.role import Role
+from spake2plus.utils import decode_point_uncompressed, encode_point_uncompressed
 
 from cryptography.hazmat.primitives import hashes
 import secrets
+import socket
 
 
 class Verifier(Role):
-    def finish(self, X, y):
+    def finish(self, X, y=None):
         if not y:
             y = secrets.randbelow(self.params.curve.field.n)
 
@@ -26,3 +29,39 @@ class Verifier(Role):
         self.V = self.params.h * self.y * self.L
 
         return self.Y
+
+    def handle_client(self, conn):
+        X = conn.recv(1024)
+        print(f"Received X from Prover: {X.hex()}")
+        X = decode_point_uncompressed(X, self.params.curve)
+        print(f"X = ({X.x}, {X.y})")
+
+        Y = self.finish(X)
+        print(f"Y = ({Y.x}, {Y.y})")
+        Y = encode_point_uncompressed(Y, self.params.curve)
+        conn.sendall(Y)
+        print(f"Sent Y to Verifier: {Y.hex()}")
+
+        print("Computing key schedule...")
+        self.compute_key_schedule()
+        confirmV, confirmP = self.confirm()
+        conn.sendall(confirmV)
+        print(f"Sent confirmV to Prover: {confirmV.hex()}")
+
+        confirmPP = conn.recv(1024)
+        print(f"Received X from Prover: {confirmP.hex()}")
+
+        assert confirmP == confirmPP
+
+        print(f"Key: {self.shared_key().hex()}")
+        print("Protocol completed successfully.")
+
+    def start(self):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+            server_socket.bind((self.host, self.port))
+            server_socket.listen(1)
+            print(f"Verifier is listening on {self.host}:{self.port}...")
+
+            conn, addr = server_socket.accept()
+            with conn:
+                self.handle_client(conn)
