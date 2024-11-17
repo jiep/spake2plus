@@ -41,6 +41,34 @@ You can install this package locally using `pip`:
 pip install -e .
 ```
 
+## Usage
+
+```bash
+usage: spake2plus [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context CONTEXT --password
+                  PASSWORD --salt SALT [--iterations ITERATIONS]
+                  [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}]
+                  {prover,verifier}
+```
+
+### Example: Verifier
+
+The `Verifier` acts as a server in the protocol. You can run it as follows:
+
+```bash
+
+spake2plus verifier  --idProver alice --idVerifier bob --context 1234 --password 1234 --salt 1234
+```
+
+The Prover acts as a client in the protocol. You can run it as follows:
+
+```bash
+spake2plus prover --idProver alice --idVerifier bob --context 1234 --password 1234 --salt 1234
+```
+
+> [!NOTE]  
+> If not specified ciphersuite, P256-SHA256 is used by default.
+> Ciphersuites allowed: P256-SHA256, P256-SHA512, P384-SHA256, P384-SHA512,and P521-SHA512
+
 ## Contributing
 
 Contributions are welcome! To contribute, follow these steps:
@@ -55,3 +83,7 @@ Contributions are welcome! To contribute, follow these steps:
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
+## Disclaimer
+
+> [!CAUTION]
+This code has not been audited or formally reviewed for security. Use it at your own risk and only for educational purposes or in non-critical environments.
