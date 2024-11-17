@@ -30,6 +30,9 @@ jobs:
     - name: Build the package
       run: python -m build
 
+    - name: Check wheel
+      run: twine check dist/*
+
     - name: Upload Wheel as artifact
       uses: actions/upload-artifact@v4
       with:

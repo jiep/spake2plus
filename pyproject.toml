@@ -8,6 +8,7 @@ authors = [
     {name = "José Ignacio Escribano"},
 ]
 description = "A simple implementation of SPAKE2+ protocol"
+readme = "README.md"
 requires-python = ">=3.11"
 keywords = ["cryptography", "spake2plus"]
 license = {file = "LICENSE"}
@@ -16,9 +17,8 @@ classifiers = [
     "Topic :: Security",
     "Topic :: Security :: Cryptography"
 ]
-dynamic = ["version", "dependencies", "optional-dependencies", "readme"]
+dynamic = ["version", "dependencies", "optional-dependencies"]
 [tool.setuptools.dynamic]
 version = {attr = "spake2plus.__version__"}
 dependencies = {file = ["requirements.txt"]}
 optional-dependencies = {dev = { file = ["requirements-dev.txt"] }}
-readme = {file = ["README.md"]}
