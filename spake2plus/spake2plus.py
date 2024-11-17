@@ -45,9 +45,6 @@ class SPAKE2PLUS:
         self.prover.compute_key_schedule()
         self.verifier.compute_key_schedule()
 
-        print("K_shared->", self.prover.shared_key().hex())
-        print("K_shared->", self.verifier.shared_key().hex())
-
         confirmVV, confirmPV = self.verifier.confirm()
         confirmVP, confirmPP = self.prover.confirm()
 

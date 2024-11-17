@@ -98,6 +98,7 @@ class Role:
     def set_w0_w1(self, w0, w1):
         self.w0 = w0
         self.w1 = w1
+        self.L = int.from_bytes(self.w1, byteorder="big") * self.params.P
 
     def compute_w0_w1(self, pw, salt, iterations=100000):
 
@@ -109,8 +110,6 @@ class Role:
             + get_len(self.idVerifier)
             + self.idVerifier
         )
-
-        print(input_data)
 
         k = 64
         output_length = 2 * math.ceil(math.log(self.params.curve.field.n, 2) + k)
@@ -131,4 +130,4 @@ class Role:
         w0 = w0s % self.params.curve.field.n
         w1 = w1s % self.params.curve.field.n
         self.w0 = w0.to_bytes((w0.bit_length() + 7) // 8, "big")
-        self.w1 = w0.to_bytes((w1.bit_length() + 7) // 8, "big")
+        self.w1 = w1.to_bytes((w1.bit_length() + 7) // 8, "big")
