@@ -23,6 +23,7 @@ The protocol is efficient, secure, and suitable for password-based authenticated
 
 ### How it Works:
 1. **Registration Phase**: Both parties exchange public parameters to initialize the protocol securely.
+2. **Password Derivation**: The shared password is processed with PBKDF2, using explicit identities (`idProver` and `idVerifier`) and the hash function of the ciphersuite, to derive keying material.
 2. **Key Exchange**: The Prover and Verifier compute and exchange values (`X`, `Y`) to establish a shared secret.
 3. **Verification**: Both parties derive cryptographic secrets (`confirmP`, `confirmV`) to verify the integrity of the exchange and finalize authentication.
 
