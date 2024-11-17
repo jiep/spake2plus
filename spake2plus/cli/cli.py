@@ -13,15 +13,19 @@ from spake2plus.prover import Prover
 from spake2plus.verifier import Verifier
 from spake2plus import __version__
 
+
 def banner():
-    print(f"""
+    print(
+        f"""
 ███████ ██████   █████  ██   ██ ███████ ██████  ██████  ██      ██    ██ ███████ 
 ██      ██   ██ ██   ██ ██  ██  ██           ██ ██   ██ ██      ██    ██ ██      
 ███████ ██████  ███████ █████   █████    █████  ██████  ██      ██    ██ ███████ 
      ██ ██      ██   ██ ██  ██  ██      ██      ██      ██      ██    ██      ██ 
 ███████ ██      ██   ██ ██   ██ ███████ ███████ ██      ███████  ██████  ███████
                                                                           v{__version__} 
-    """)
+    """
+    )
+
 
 def main():
     parser = argparse.ArgumentParser(prog="spake2plus", description="SPAKE2+ protocol")
