@@ -59,7 +59,7 @@ The `Verifier` acts as a server in the protocol. You can run it as follows:
 spake2plus verifier  --idProver alice --idVerifier bob --context 1234 --password 1234 --salt 1234
 ```
 
-The Prover acts as a client in the protocol. You can run it as follows:
+The `Prover` acts as a client in the protocol. You can run it as follows:
 
 ```bash
 spake2plus prover --idProver alice --idVerifier bob --context 1234 --password 1234 --salt 1234
