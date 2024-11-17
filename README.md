@@ -5,6 +5,21 @@ SPAKE2+, an Augmented Password-Authenticated Key Exchange (PAKE) Protocol](https
 
 ## Protocol overview
 
+```mermaid
+
+sequenceDiagram
+    participant Prover
+    participant Verifier
+
+    Prover->>Verifier: (registration)
+    Note over Prover,Verifier: Set up the protocol
+    Prover->>Verifier: shareP (compute shareP)
+    Verifier->>Prover: shareV (compute shareV)
+    Note over Prover,Verifier: Derive secrets
+    Verifier->>Prover: confirmV (compute confirmV)
+    Prover->>Verifier: confirmP (compute confirmP)
+```
+
 ```
                  Prover                     Verifier
 
