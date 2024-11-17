@@ -1,6 +1,5 @@
 from spake2plus.role import Role
 
-from cryptography.hazmat.primitives import hashes
 import secrets
 
 
