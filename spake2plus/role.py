@@ -5,7 +5,17 @@ from spake2plus.utils import encode_point_uncompressed, get_len, mac
 
 
 class Role:
-    def __init__(self, idProver, idVerifier, w0, w1, context, params):
+    def __init__(
+        self,
+        idProver,
+        idVerifier,
+        w0,
+        w1,
+        context,
+        params,
+        host="localhost",
+        port=12345,
+    ):
         self.idProver = idProver
         self.idVerifier = idVerifier
         self.w0 = w0
@@ -13,6 +23,8 @@ class Role:
         self.params = params
         self.L = int.from_bytes(self.w1, byteorder="big") * self.params.P
         self.context = context
+        self.host = host
+        self.port = port
 
     def shared_key(self):
         return self.K_shared
