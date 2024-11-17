@@ -63,5 +63,4 @@ class Verifier(Role):
 
             conn, addr = server_socket.accept()
             with conn:
-                print(f"Connected by {addr}")
                 self.handle_client(conn)

@@ -26,7 +26,7 @@ class Role:
         self.salt = salt
         self.params = params
         self.iterations = iterations
-        self.compute_w0_w1(self.password, salt, iterations)
+        self.compute_w0_w1(password, salt, iterations)
         self.L = int.from_bytes(self.w1, byteorder="big") * self.params.P
         self.context = context
         self.host = host
@@ -109,6 +109,8 @@ class Role:
             + get_len(self.idVerifier)
             + self.idVerifier
         )
+
+        print(input_data)
 
         k = 64
         output_length = 2 * math.ceil(math.log(self.params.curve.field.n, 2) + k)

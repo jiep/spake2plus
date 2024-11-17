@@ -25,12 +25,16 @@ class SPAKE2PLUS:
         self.idVerifier = idVerifier
         self.context = context
 
+        pw = "1234"
+        salt = "salt"
+        iterations = 1000
+
         self.prover = Prover(
-            idProver, idVerifier, "1234", "1234".encode(), 1000, context, params
+            idProver, idVerifier, pw, salt.encode(), iterations, context, params
         )
         self.prover.set_w0_w1(w0, w1)
         self.verifier = Verifier(
-            idProver, idVerifier, "1234", "1234".encode(), 1000, context, params
+            idProver, idVerifier, pw, salt.encode(), iterations, context, params
         )
         self.verifier.set_w0_w1(w0, w1)
 
@@ -40,6 +44,9 @@ class SPAKE2PLUS:
         self.prover.finish(Y)
         self.prover.compute_key_schedule()
         self.verifier.compute_key_schedule()
+
+        print("K_shared->", self.prover.shared_key().hex())
+        print("K_shared->", self.verifier.shared_key().hex())
 
         confirmVV, confirmPV = self.verifier.confirm()
         confirmVP, confirmPP = self.prover.confirm()
