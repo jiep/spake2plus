@@ -16,8 +16,9 @@ classifiers = [
     "Topic :: Security",
     "Topic :: Security :: Cryptography"
 ]
-dynamic = ["dependencies", "version", "readme"]
+dynamic = ["version", "dependencies", "optional-dependencies", "readme"]
 [tool.setuptools.dynamic]
 version = {attr = "spake2plus.__version__"}
 dependencies = {file = ["requirements.txt"]}
+optional-dependencies = {dev = { file = ["requirements-dev.txt"] }}
 readme = {file = ["README.md"]}
