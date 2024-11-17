@@ -71,6 +71,8 @@ spake2plus prover --idProver alice --idVerifier bob --context 1234 --password 12
 
 > [!WARNING]  
 > Salt must have a length of 32 bytes at least!
+
+> [!WARNING]  
 > `idProvider`, `idVerifier`, `context`, `password`, and `salt` must be the same for `Prover` and `Verifier`! 
 
 
