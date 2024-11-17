@@ -4,6 +4,7 @@ from tinyec import registry
 from tinyec.ec import Point
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.hashes import HashAlgorithm
+from typing import Optional
 
 
 class Ciphersuite:
@@ -52,17 +53,20 @@ class Ciphersuite:
             case _:
                 raise InvalidInputError("invalid curve")
 
+        hash: HashAlgorithm
+        kdf: HashAlgorithm
+        mac: HashAlgorithm
 
         match hash_function:
             case "SHA-256":
-                hash: HashAlgorithm = hashes.SHA256()
-                mac: HashAlgorithm = hashes.SHA256()
-                kdf: HashAlgorithm = hashes.SHA256()
+                hash = hashes.SHA256()
+                mac = hashes.SHA256()
+                kdf = hashes.SHA256()
                 length = 32
             case "SHA-512":
-                hash: HashAlgorithm = hashes.SHA512()
-                mac: HashAlgorithm = hashes.SHA512()
-                kdf: HashAlgorithm = hashes.SHA512()
+                hash = hashes.SHA512()
+                mac = hashes.SHA512()
+                kdf = hashes.SHA512()
                 length = 64
             case _:
                 raise InvalidInputError("invalid hash function")
