@@ -11,10 +11,26 @@ from spake2plus.ciphersuites import (
 )
 from spake2plus.prover import Prover
 from spake2plus.verifier import Verifier
+from spake2plus import __version__
+
+
+def banner():
+    print(
+        f"""
+███████ ██████   █████  ██   ██ ███████ ██████  ██████  ██      ██    ██ ███████ 
+██      ██   ██ ██   ██ ██  ██  ██           ██ ██   ██ ██      ██    ██ ██      
+███████ ██████  ███████ █████   █████    █████  ██████  ██      ██    ██ ███████ 
+     ██ ██      ██   ██ ██  ██  ██      ██      ██      ██      ██    ██      ██ 
+███████ ██      ██   ██ ██   ██ ███████ ███████ ██      ███████  ██████  ███████
+                                                                          v{__version__} 
+    """
+    )
 
 
 def main():
-    parser = argparse.ArgumentParser(prog="spake2+", description="SPAKE2+ protocol")
+    parser = argparse.ArgumentParser(prog="spake2plus", description="SPAKE2+ protocol")
+
+    banner()
 
     ROLES = ["prover", "verifier"]
     CIPHERSUITES = [
