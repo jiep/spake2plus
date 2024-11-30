@@ -1,6 +1,6 @@
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
 
 from spake2plus.utils import encode_point_uncompressed, get_len, mac
 
@@ -14,7 +14,6 @@ class Role:
         idVerifier,
         password,
         salt,
-        iterations,
         context,
         params,
         host="localhost",
@@ -25,8 +24,7 @@ class Role:
         self.password = password
         self.salt = salt
         self.params = params
-        self.iterations = iterations
-        self.compute_w0_w1(password, salt, iterations)
+        self.compute_w0_w1(password, salt)
         self.L = int.from_bytes(self.w1, byteorder="big") * self.params.P
         self.context = context
         self.host = host
@@ -100,7 +98,7 @@ class Role:
         self.w1 = w1
         self.L = int.from_bytes(self.w1, byteorder="big") * self.params.P
 
-    def compute_w0_w1(self, pw, salt, iterations=100000):
+    def compute_w0_w1(self, pw, salt):
 
         input_data = (
             get_len(pw)
@@ -114,11 +112,14 @@ class Role:
         k = 64
         output_length = 2 * math.ceil(math.log(self.params.curve.field.n, 2) + k)
 
-        kdf = PBKDF2HMAC(
-            algorithm=self.params.hash,
-            length=output_length,
+        kdf = Argon2id(
             salt=salt,
-            iterations=iterations,
+            length=output_length,
+            iterations=3,
+            lanes=4,
+            memory_cost=2**16,
+            ad=None,
+            secret=None,
         )
 
         derived_key = kdf.derive(input_data)
