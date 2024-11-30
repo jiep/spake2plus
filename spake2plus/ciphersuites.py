@@ -4,7 +4,6 @@ from tinyec import registry
 from tinyec.ec import Point
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.hashes import HashAlgorithm
-from typing import Optional
 
 
 class Ciphersuite:

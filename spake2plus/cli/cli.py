@@ -1,8 +1,6 @@
-import sys
 import argparse
 
 from spake2plus.ciphersuites import (
-    Ciphersuite,
     CiphersuiteP256_SHA256,
     CiphersuiteP256_SHA512,
     CiphersuiteP384_SHA256,

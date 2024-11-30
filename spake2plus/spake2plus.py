@@ -1,7 +1,3 @@
-from cryptography.hazmat.primitives import hashes
-import secrets
-
-from spake2plus.utils import encode_point_uncompressed, mac, get_len
 from spake2plus.parameters import Parameters
 from spake2plus.prover import Prover
 from spake2plus.verifier import Verifier
