@@ -2,7 +2,6 @@ from spake2plus.exceptions import InvalidInputError
 from spake2plus.role import Role
 from spake2plus.utils import decode_point_uncompressed, encode_point_uncompressed
 
-from cryptography.hazmat.primitives import hashes
 import secrets
 import socket
 

@@ -1,4 +1,4 @@
-from cryptography.hazmat.primitives import hashes, hmac
+from cryptography.hazmat.primitives import hmac
 from tinyec.ec import Point
 
 

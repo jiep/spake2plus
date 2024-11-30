@@ -1,9 +1,11 @@
-from cryptography.hazmat.primitives import hashes
 from spake2plus.spake2plus import SPAKE2PLUS
-from spake2plus.parameters import Parameters
-from spake2plus.prover import Prover
-from spake2plus.verifier import Verifier
-from spake2plus.ciphersuites import *
+from spake2plus.ciphersuites import (
+    CiphersuiteP256_SHA256,
+    CiphersuiteP256_SHA512,
+    CiphersuiteP384_SHA256,
+    CiphersuiteP384_SHA512,
+    CiphersuiteP521_SHA512,
+)
 
 
 def test_p256():
