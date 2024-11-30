@@ -12,7 +12,7 @@ class Verifier(Role):
         if not y:
             y = secrets.randbelow(self.params.curve.field.n)
 
-        if not X.on_curve:
+        if not self.is_in_subgroup(X):
             raise InvalidInputError("invalid input")
 
         self.y = y

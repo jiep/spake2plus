@@ -18,7 +18,7 @@ class Prover(Role):
         return self.X
 
     def finish(self, Y):
-        if not Y.on_curve:
+        if not self.is_in_subgroup(Y):
             raise InvalidInputError("invalid input")
 
         self.Y = Y
