@@ -65,7 +65,7 @@ sequenceDiagram
 
 This package requires the following dependencies:
 
-* `cryptography==43.0.3`
+* `cryptography==44.0.0`
 * `tinyec==0.4.0`
 
 All dependencies are automatically installed when you install the package via `pip`.
