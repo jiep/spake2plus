@@ -2,29 +2,26 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from tinyec.ec import Point, Inf
 
+from spake2plus.parameters import Parameters
 from spake2plus.utils import encode_point_uncompressed, get_len, mac
 
 
 class Role:
     def __init__(
         self,
-        idProver,
-        idVerifier,
-        password,
-        salt,
-        context,
-        params,
+        idProver: bytes,
+        idVerifier: bytes,
+        context: bytes,
+        params: Parameters,
+        w0: bytes,
         host="localhost",
         port=12345,
     ):
         self.idProver = idProver
         self.idVerifier = idVerifier
-        self.password = password
-        self.salt = salt
         self.params = params
-        # self.compute_w0_w1(password, salt)
-        # self.L = int.from_bytes(self.w1, byteorder="big") * self.params.P
         self.context = context
+        self.w0 = w0
         self.host = host
         self.port = port
 
@@ -91,10 +88,6 @@ class Role:
     def check(self, confirmV, confirmP):
         return self.confirmV == confirmV and self.confirmP == confirmP
 
-    def set_w0_w1(self, w0, w1):
-        self.w0 = w0
-        self.w1 = w1
-        self.L = int.from_bytes(self.w1, byteorder="big") * self.params.P
 
     def is_in_subgroup(self, X: Point):
         infinity = Inf(self.params.curve)

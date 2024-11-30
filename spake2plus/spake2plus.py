@@ -3,6 +3,8 @@ from spake2plus.prover import Prover
 from spake2plus.verifier import Verifier
 from spake2plus.exceptions import ConfirmingError
 
+from tinyec.ec import Point
+
 
 class SPAKE2PLUS:
     def __init__(
@@ -12,25 +14,20 @@ class SPAKE2PLUS:
         idVerifier: bytes,
         w0: bytes,
         w1: bytes,
+        L: Point,
         context: bytes,
         x: bytes,
-        y: bytes,
+        y: bytes
     ):
         self.params = params
         self.idProver = idProver
         self.idVerifier = idVerifier
         self.context = context
 
-        pw = "1234"
-        salt = "saltsalt"
+        self.prover = Prover(idProver, idVerifier, context, params, w0, w1)
 
-        self.prover = Prover(idProver, idVerifier, pw, salt.encode(), context, params)
-        self.prover.set_w0_w1(w0, w1)
-        self.verifier = Verifier(
-            idProver, idVerifier, pw, salt.encode(), context, params
-        )
-        self.verifier.set_w0_w1(w0, w1)
-
+        self.verifier = Verifier(idProver, idVerifier, context, params, w0, L)
+        print("w000000", self.prover.w1)
         X = self.prover.init(x)
         Y = self.verifier.finish(X, y)
 

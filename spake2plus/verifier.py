@@ -7,6 +7,21 @@ import socket
 
 
 class Verifier(Role):
+    def __init___(
+        self,
+        idProver,
+        idVerifier,
+        context,
+        params,
+        w0: bytes,
+        L: bytes,
+        host="localhost",
+        port=12345,
+    ):
+        super().__init__(idProver, idVerifier, context, params, host, port)
+        self.w0 = w0
+        self.L = L
+
     def finish(self, X, y=None):
         if not y:
             y = secrets.randbelow(self.params.curve.field.n)
