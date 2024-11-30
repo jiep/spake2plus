@@ -28,9 +28,7 @@ class SPAKE2PLUS:
         pw = "1234"
         salt = "saltsalt"
 
-        self.prover = Prover(
-            idProver, idVerifier, pw, salt.encode(), context, params
-        )
+        self.prover = Prover(idProver, idVerifier, pw, salt.encode(), context, params)
         self.prover.set_w0_w1(w0, w1)
         self.verifier = Verifier(
             idProver, idVerifier, pw, salt.encode(), context, params
