@@ -23,7 +23,7 @@ The protocol is efficient, secure, and suitable for password-based authenticated
 
 ### How it Works:
 1. **Registration Phase**: Both parties exchange public parameters to initialize the protocol securely.
-2. **Password Derivation**: The shared password is processed with PBKDF2, using explicit identities (`idProver` and `idVerifier`) and the hash function of the ciphersuite, to derive keying material.
+2. **Password Derivation**: The shared password is processed with Argon2id, using explicit identities (`idProver` and `idVerifier`) and the hash function of the ciphersuite, to derive keying material.
 2. **Key Exchange**: The Prover and Verifier compute and exchange values (`X`, `Y`) to establish a shared secret.
 3. **Verification**: Both parties derive cryptographic secrets (`confirmP`, `confirmV`) to verify the integrity of the exchange and finalize authentication.
 
@@ -81,10 +81,10 @@ pip install -e .
 ## Usage
 
 ```bash
-usage: spake2plus [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context CONTEXT --password
-                  PASSWORD --salt SALT [--iterations ITERATIONS]
+usage: spake2plus [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context CONTEXT --password PASSWORD --salt SALT
                   [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}]
                   {prover,verifier}
+spake2plus: error: the following arguments are required: role, --idProver, --idVerifier, --context, --password, --salt
 ```
 
 ### Example: Verifier
@@ -93,13 +93,13 @@ The `Verifier` acts as a server in the protocol. You can run it as follows:
 
 ```bash
 
-spake2plus verifier  --idProver alice --idVerifier bob --context 1234 --password 1234 --salt 1234
+spake2plus verifier  --idProver alice --idVerifier bob --context 1234 --password 1234 --salt 12341234
 ```
 
 The `Prover` acts as a client in the protocol. You can run it as follows:
 
 ```bash
-spake2plus prover --idProver alice --idVerifier bob --context 1234 --password 1234 --salt 1234
+spake2plus prover --idProver alice --idVerifier bob --context 1234 --password 1234 --salt 12341234
 ```
 
 > [!NOTE]  

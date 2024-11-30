@@ -1,2 +1,2 @@
-cryptography==43.0.3
+cryptography==44.0.0
 tinyec==0.4.0

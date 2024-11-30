@@ -49,7 +49,6 @@ def main():
     required.add_argument("--context", required=True)
     required.add_argument("--password", required=True)
     required.add_argument("--salt", required=True)
-    required.add_argument("--iterations", type=int, default=100000)
     required.add_argument(
         "--ciphersuite", choices=CIPHERSUITES, default=CIPHERSUITES[0]
     )
@@ -75,7 +74,6 @@ def main():
                 args.idVerifier.encode(),
                 args.password,
                 args.salt.encode(),
-                args.iterations,
                 args.context.encode(),
                 ciphersuite.params,
             )
@@ -86,7 +84,6 @@ def main():
                 args.idVerifier.encode(),
                 args.password,
                 args.salt.encode(),
-                args.iterations,
                 args.context.encode(),
                 ciphersuite.params,
             )
