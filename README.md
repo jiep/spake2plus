@@ -87,6 +87,14 @@ usage: spake2plus [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context CON
 spake2plus: error: the following arguments are required: role, --idProver, --idVerifier, --context, --password, --salt
 ```
 
+### Offline registration
+
+The `Prover` computes the values `w0` and `w1`, as well as the registration record `L`. `w0` and `w1` are derived by hashing the password with the identities of the two participants. `w0` and the record `L` are then shared with the `Verifier`. 
+
+```
+spake2plus registration --password 1234 --idProver alice --idVerifier bob
+```
+
 ### Example: Verifier
 
 The `Verifier` acts as a server in the protocol. You can run it as follows:

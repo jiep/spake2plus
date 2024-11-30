@@ -8,81 +8,138 @@ from spake2plus.ciphersuites import (
     CiphersuiteP521_SHA512,
 )
 from spake2plus.prover import Prover
+from spake2plus.utils import encode_point_uncompressed
 from spake2plus.verifier import Verifier
-from spake2plus import __version__
+from spake2plus.cli.banner import banner
 
 
-def banner():
-    print(
-        f"""
-███████ ██████   █████  ██   ██ ███████ ██████  ██████  ██      ██    ██ ███████ 
-██      ██   ██ ██   ██ ██  ██  ██           ██ ██   ██ ██      ██    ██ ██      
-███████ ██████  ███████ █████   █████    █████  ██████  ██      ██    ██ ███████ 
-     ██ ██      ██   ██ ██  ██  ██      ██      ██      ██      ██    ██      ██ 
-███████ ██      ██   ██ ██   ██ ███████ ███████ ██      ███████  ██████  ███████
-                                                                          v{__version__} 
-    """
-    )
+import argparse
 
+CIPHERSUITE_MAP = {
+    "P256-SHA256": CiphersuiteP256_SHA256,
+    "P256-SHA512": CiphersuiteP256_SHA512,
+    "P384-SHA256": CiphersuiteP384_SHA256,
+    "P384-SHA512": CiphersuiteP384_SHA512,
+    "P521-SHA512": CiphersuiteP521_SHA512,
+}
+
+DEFAULT_CIPHERSUITE = list(CIPHERSUITE_MAP.keys())[0]
+
+
+class SPAKE2PlusCLI:
+    def __init__(self):
+        self.parser = argparse.ArgumentParser(
+            description="SPAKE2+ Protocol"
+        )
+        self.subparsers = self.parser.add_subparsers(dest="command", required=True)
+
+        self._add_verifier_command()
+        self._add_prover_command()
+        self._add_prover_registration_command()
+
+    def _add_verifier_command(self):
+        parser_verifier = self.subparsers.add_parser(
+            "verifier", help="Run the verifier role in the SPAKE2+ protocol"
+        )
+        parser_verifier.add_argument("--idProver", required=True, help="Prover's identity")
+        parser_verifier.add_argument("--idVerifier", required=True, help="Verifier's identity")
+        parser_verifier.add_argument("--context", required=True, help="Protocol context")
+        parser_verifier.add_argument("--password", required=True, help="Shared password")
+        parser_verifier.add_argument("--salt", required=True, help="Salt for key derivation")
+        parser_verifier.add_argument(
+            "--ciphersuite",
+            required=False,
+            choices=list(CIPHERSUITE_MAP.keys()),
+            default=DEFAULT_CIPHERSUITE,
+            help=f"Ciphersuite to use (default: {DEFAULT_CIPHERSUITE})",
+        )
+
+    def _add_prover_command(self):
+        parser_prover = self.subparsers.add_parser(
+            "prover", help="Run the prover role in the SPAKE2+ protocol"
+        )
+        parser_prover.add_argument("--idProver", required=True, help="Prover's identity")
+        parser_prover.add_argument("--idVerifier", required=True, help="Verifier's identity")
+        parser_prover.add_argument("--context", required=True, help="Protocol context")
+        parser_prover.add_argument("--password", required=True, help="Shared password")
+        parser_prover.add_argument("--salt", required=True, help="Salt for key derivation")
+        parser_prover.add_argument(
+            "--ciphersuite",
+            required=False,
+            choices=list(CIPHERSUITE_MAP.keys()),
+            default=DEFAULT_CIPHERSUITE,
+            help=f"Ciphersuite to use (default: {DEFAULT_CIPHERSUITE})",
+        )
+
+    def _add_prover_registration_command(self):
+        parser_registration = self.subparsers.add_parser(
+            "registration",
+            help="Perform registration for the Prover",
+            add_help=False
+        )
+        parser_registration.add_argument("--password", required=True, help="Password for key generation")
+        parser_registration.add_argument("--idProver", required=True, help="Prover's identity")
+        parser_registration.add_argument("--idVerifier", required=True, help="Verifier's identity")
+        parser_registration.add_argument(
+            "--ciphersuite",
+            required=False,
+            choices=list(CIPHERSUITE_MAP.keys()),
+            default=DEFAULT_CIPHERSUITE,
+            help=f"Ciphersuite to use (default: {DEFAULT_CIPHERSUITE})",
+        )
+
+    def run(self, args=None):
+        banner()
+
+        args = self.parser.parse_args(args)
+        if args.command == "verifier":
+            self.run_verifier(args)
+        elif args.command == "prover":
+            self.run_prover(args)
+        elif args.command == "registration":
+            self.run_prover_registration(args)
+
+    def run_verifier(self, args):
+        ciphersuite = CIPHERSUITE_MAP[args.ciphersuite]()
+        verifier = Verifier(
+                args.idProver.encode(),
+                args.idVerifier.encode(),
+                args.password,
+                args.salt.encode(),
+                args.context.encode(),
+                ciphersuite.params,
+            )
+        verifier.start()
+
+    def run_prover(self, args):
+        ciphersuite = CIPHERSUITE_MAP[args.ciphersuite]()
+        prover = Prover(
+                args.idProver.encode(),
+                args.idVerifier.encode(),
+                args.password,
+                args.salt.encode(),
+                args.context.encode(),
+                ciphersuite.params,
+        )
+        prover.start()
+
+    def run_prover_registration(self, args):
+        
+        ciphersuite = CIPHERSUITE_MAP[args.ciphersuite]()
+        prover = Prover(
+                args.idProver.encode(),
+                args.idVerifier.encode(),
+                args.password,
+                None,
+                None,
+                ciphersuite.params,
+        )
+        w0, w1, L = prover.registration(args.password)
+        print(f"w0 = {w0.hex()}")
+        print(f"w1 = {w1.hex()}")
+        print(f"L  = {L.hex()}")
+        
 
 def main():
-    parser = argparse.ArgumentParser(prog="spake2plus", description="SPAKE2+ protocol")
-
-    banner()
-
-    ROLES = ["prover", "verifier"]
-    CIPHERSUITES = [
-        "P256-SHA256",
-        "P256-SHA512",
-        "P384-SHA256",
-        "P384-SHA512",
-        "P521-SHA512",
-    ]
-
-    parser = argparse.ArgumentParser()
-    required = parser.add_argument_group("required arguments")
-    required.add_argument("role", choices=ROLES)
-    required.add_argument("--idProver", required=True)
-    required.add_argument("--idVerifier", required=True)
-    required.add_argument("--context", required=True)
-    required.add_argument("--password", required=True)
-    required.add_argument("--salt", required=True)
-    required.add_argument(
-        "--ciphersuite", choices=CIPHERSUITES, default=CIPHERSUITES[0]
-    )
-
-    args = parser.parse_args()
-
-    match args.ciphersuite:
-        case "P256-SHA256":
-            ciphersuite = CiphersuiteP256_SHA256()
-        case "P256-SHA512":
-            ciphersuite = CiphersuiteP256_SHA512()
-        case "P384-SHA256":
-            ciphersuite = CiphersuiteP384_SHA256()
-        case "P384-SHA512":
-            ciphersuite = CiphersuiteP384_SHA512()
-        case "P521-SHA512":
-            ciphersuite = CiphersuiteP521_SHA512()
-
-    match args.role:
-        case "prover":
-            prover = Prover(
-                args.idProver.encode(),
-                args.idVerifier.encode(),
-                args.password,
-                args.salt.encode(),
-                args.context.encode(),
-                ciphersuite.params,
-            )
-            prover.start()
-        case "verifier":
-            verifier = Verifier(
-                args.idProver.encode(),
-                args.idVerifier.encode(),
-                args.password,
-                args.salt.encode(),
-                args.context.encode(),
-                ciphersuite.params,
-            )
-            verifier.start()
+    cli = SPAKE2PlusCLI()
+    cli.run()
