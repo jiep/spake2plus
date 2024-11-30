@@ -4,6 +4,7 @@ from tinyec.ec import Point, Inf
 
 from spake2plus.utils import encode_point_uncompressed, get_len, mac
 
+
 class Role:
     def __init__(
         self,
@@ -21,8 +22,8 @@ class Role:
         self.password = password
         self.salt = salt
         self.params = params
-        #self.compute_w0_w1(password, salt)
-        #self.L = int.from_bytes(self.w1, byteorder="big") * self.params.P
+        # self.compute_w0_w1(password, salt)
+        # self.L = int.from_bytes(self.w1, byteorder="big") * self.params.P
         self.context = context
         self.host = host
         self.port = port

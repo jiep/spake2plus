@@ -1,7 +1,11 @@
 import math
 from spake2plus.exceptions import InvalidInputError
 from spake2plus.role import Role
-from spake2plus.utils import encode_point_uncompressed, decode_point_uncompressed, get_len
+from spake2plus.utils import (
+    encode_point_uncompressed,
+    decode_point_uncompressed,
+    get_len,
+)
 from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
 
 import secrets
@@ -9,6 +13,7 @@ import socket
 
 
 SALT_SIZE = 32
+
 
 class Prover(Role):
     def init(self, x=None):
