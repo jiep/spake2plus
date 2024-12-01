@@ -7,7 +7,7 @@ import socket
 
 
 class Verifier(Role):
-    def __init___(
+    def __init__(
         self,
         idProver,
         idVerifier,

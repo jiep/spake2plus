@@ -19,7 +19,7 @@ SALT_SIZE = 32
 class Prover(Role):
     w1: bytes
 
-    def __init___(
+    def __init__(
         self,
         idProver: bytes,
         idVerifier: bytes,
