@@ -7,15 +7,11 @@ from spake2plus.utils import (
     decode_point_uncompressed,
     get_len,
 )
-from spake2plus.logger_config import get_logger
 
 from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
 
 import secrets
 import socket
-
-
-logger = get_logger("Prover")
 
 
 SALT_SIZE = 32
@@ -32,10 +28,11 @@ class Prover(Role):
         params: Parameters,
         w0: bytes,
         w1: bytes,
+        logger,
         host: str = "localhost",
-        port: int = 12345,
+        port: int = 12345
     ):
-        super().__init__(idProver, idVerifier, context, params, w0, host, port)
+        super().__init__(idProver, idVerifier, context, params, w0, logger, host, port)
         self.w1 = w1
 
     def init(self, x=None):
@@ -67,36 +64,36 @@ class Prover(Role):
     def start(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
             client_socket.connect((self.host, self.port))
-            logger.info(f"Connected to Verifier at {self.host}:{self.port}")
+            self.logger.info(f"Connected to Verifier at {self.host}:{self.port}")
             self.handle_protocol(client_socket)
 
     def handle_protocol(self, client_socket):
         X = self.init()
-        logger.debug(f"X = ({X.x}, {X.y})")
+        self.logger.debug(f"X = ({X.x}, {X.y})")
         X = encode_point_uncompressed(X, self.params.curve)
         client_socket.sendall(X)
-        logger.info(f"Sent X to verifier: {X.hex()}")
+        self.logger.info(f"Sent X to verifier: {X.hex()}")
 
         Y = client_socket.recv(1024)  # Receive bytes
-        logger.info(f"Received Y: {Y.hex()}")
+        self.logger.info(f"Received Y: {Y.hex()}")
         Y = decode_point_uncompressed(Y, self.params.curve)
-        logger.debug(f"Y = ({Y.x}, {Y.y})")
+        self.logger.debug(f"Y = ({Y.x}, {Y.y})")
         self.finish(Y)
 
-        logger.info("Computing key schedule...")
+        self.logger.info("Computing key schedule...")
         self.compute_key_schedule()
 
         confirmV, confirmP = self.confirm()
         confirmVV = client_socket.recv(1024)
-        logger.info(f"Received confirmV: {confirmV.hex()}")
+        self.logger.info(f"Received confirmV: {confirmV.hex()}")
 
         client_socket.sendall(confirmP)
-        logger.info(f"Sent confirmP to Verifier: {confirmV.hex()}")
+        self.logger.info(f"Sent confirmP to Verifier: {confirmV.hex()}")
 
         assert confirmV == confirmVV
 
-        logger.debug(f"Key: {self.shared_key().hex()}")
-        logger.info("Protocol completed successfully.")
+        self.logger.debug(f"Key: {self.shared_key().hex()}")
+        self.logger.info("Protocol completed successfully.")
 
     def registration(self, password):
         input_data = (
