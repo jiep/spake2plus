@@ -14,6 +14,7 @@ class Role:
         context: bytes,
         params: Parameters,
         w0: bytes,
+        logger,
         host="localhost",
         port=12345,
     ):
@@ -22,6 +23,7 @@ class Role:
         self.params = params
         self.context = context
         self.w0 = w0
+        self.logger = logger
         self.host = host
         self.port = port
 

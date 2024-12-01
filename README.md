@@ -81,7 +81,19 @@ pip install -e .
 ## Usage
 
 ```bash 
-usage: spake2plus [-h] {verifier,prover,registration} ...
+usage: spake2plus [-h] [-v] {verifier,prover,registration} ...
+
+SPAKE2+ Protocol
+
+positional arguments:
+  {verifier,prover,registration}
+    verifier            Run the verifier role in the SPAKE2+ protocol
+    prover              Run the prover role in the SPAKE2+ protocol
+    registration        Perform registration for the Prover
+
+options:
+  -h, --help            show this help message and exit
+  -v, --verbose         Increase output verbosity (e.g., -v, -vv, -vvv)
 ```
 
 ### Offline registration
@@ -89,21 +101,56 @@ usage: spake2plus [-h] {verifier,prover,registration} ...
 The `Prover` computes the values `w0` and `w1`, as well as the registration record `L`. `w0` and `w1` are derived by hashing the password with the identities of the two participants. `w0` and the record `L` are then shared with the `Verifier`. 
 
 ```bash
-spake2plus registration --password 1234 --idProver alice --idVerifier bob
+usage: spake2plus registration [-h] --password PASSWORD --idProver IDPROVER
+                               --idVerifier IDVERIFIER
+                               [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}]
+
+options:
+  -h, --help            show this help message and exit
+  --password PASSWORD   Password for key generation
+  --idProver IDPROVER   Prover's identity
+  --idVerifier IDVERIFIER
+                        Verifier's identity
+  --ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}
+                        Ciphersuite to use (default: P256-SHA256)
 ```
 
 ### Verifier
 
 ```bash
-usage: spake2plus verifier [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context CONTEXT --w0 W0 --L L
+usage: spake2plus verifier [-h] --idProver IDPROVER --idVerifier IDVERIFIER
+                           --context CONTEXT --w0 W0 --L L
                            [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}]
+
+options:
+  -h, --help            show this help message and exit
+  --idProver IDPROVER   Prover's identity
+  --idVerifier IDVERIFIER
+                        Verifier's identity
+  --context CONTEXT     Protocol context
+  --w0 W0               Value for w0 as hexadecimal string
+  --L L                 Value for L as hexadecimal string
+  --ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}
+                        Ciphersuite to use (default: P256-SHA256)
 ```
 
 ### Prover
 
 ```bash
-usage: spake2plus prover [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context CONTEXT --w0 W0 --w1 W1
+usage: spake2plus prover [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context
+                         CONTEXT --w0 W0 --w1 W1
                          [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}]
+
+options:
+  -h, --help            show this help message and exit
+  --idProver IDPROVER   Prover's identity
+  --idVerifier IDVERIFIER
+                        Verifier's identity
+  --context CONTEXT     Protocol context
+  --w0 W0               Value for w0 as hexadecimal string
+  --w1 W1               Value for w1 as hexadecimal string
+  --ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}
+                        Ciphersuite to use (default: P256-SHA256)
 ```
 
 ### Example: Verifier
