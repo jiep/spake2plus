@@ -69,31 +69,33 @@ class Prover(Role):
 
     def handle_protocol(self, client_socket):
         X = self.init()
-        self.logger.debug(f"X = ({X.x}, {X.y})")
+        self.logger.debug(f"P: X = ({X.x}, {X.y})")
         X = encode_point_uncompressed(X, self.params.curve)
         client_socket.sendall(X)
-        self.logger.info(f"Sent X to verifier: {X.hex()}")
+        self.logger.info(f"P -> V [{len(X)}]: X = {X.hex()}]")
 
-        Y = client_socket.recv(1024)  # Receive bytes
-        self.logger.info(f"Received Y: {Y.hex()}")
+        Y = client_socket.recv(1024)
+        self.logger.info(f"P <- V [{len(Y)}]: Y = {Y.hex()}")
         Y = decode_point_uncompressed(Y, self.params.curve)
-        self.logger.debug(f"Y = ({Y.x}, {Y.y})")
+        self.logger.debug(f"P: Y = ({Y.x}, {Y.y})")
         self.finish(Y)
 
-        self.logger.info("Computing key schedule...")
+        self.logger.info("P: Computing key schedule...")
         self.compute_key_schedule()
 
         confirmV, confirmP = self.confirm()
         confirmVV = client_socket.recv(1024)
-        self.logger.info(f"Received confirmV: {confirmV.hex()}")
+        self.logger.info(f"P <- V [{len(confirmV)}]: confirmV = {confirmV.hex()}")
 
         client_socket.sendall(confirmP)
-        self.logger.info(f"Sent confirmP to Verifier: {confirmV.hex()}")
+        self.logger.info(f"P -> V [{len(confirmP)}]: confirmP = {confirmP.hex()}")
 
         assert confirmV == confirmVV
 
-        self.logger.debug(f"Key: {self.shared_key().hex()}")
-        self.logger.info("Protocol completed successfully.")
+        self.logger.debug(
+            f"P [{len(self.shared_key())}]: Key = {self.shared_key().hex()}"
+        )
+        self.logger.info("P: Protocol completed successfully.")
 
     def registration(self, password):
         input_data = (
