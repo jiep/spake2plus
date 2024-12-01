@@ -30,7 +30,7 @@ class Prover(Role):
         w1: bytes,
         logger,
         host: str = "localhost",
-        port: int = 12345
+        port: int = 12345,
     ):
         super().__init__(idProver, idVerifier, context, params, w0, logger, host, port)
         self.w1 = w1

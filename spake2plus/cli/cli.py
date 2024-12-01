@@ -21,6 +21,14 @@ CIPHERSUITE_MAP = {
     "P521-SHA512": CiphersuiteP521_SHA512,
 }
 
+CIPHERSUITE_COMPLETE_MAP = {
+    "P256-SHA256": "SPAKE2+-P256-SHA256-HKDF-SHA256-HMAC-SHA256-Argon2id",
+    "P256-SHA512": "SPAKE2+-P256-SHA512-HKDF-SHA512-HMAC-SHA512-Argon2id",
+    "P384-SHA256": "SPAKE2+-P384-SHA256-HKDF-SHA256-HMAC-SHA256-Argon2id",
+    "P384-SHA512": "SPAKE2+-P384-SHA512-HKDF-SHA512-HMAC-SHA512-Argon2id",
+    "P521-SHA512": "SPAKE2+-P521-SHA512-HKDF-SHA512-HMAC-SHA512-Argon2id",
+}
+
 DEFAULT_CIPHERSUITE = list(CIPHERSUITE_MAP.keys())[0]
 
 
@@ -28,8 +36,11 @@ class SPAKE2PlusCLI:
     def __init__(self):
         self.parser = argparse.ArgumentParser(description="SPAKE2+ Protocol")
         self.parser.add_argument(
-            "-v", "--verbose", action="count", default=0,
-            help="Increase output verbosity (e.g., -v, -vv, -vvv)"
+            "-v",
+            "--verbose",
+            action="count",
+            default=1,
+            help="Increase output verbosity (e.g., -v, -vv, -vvv)",
         )
         self.subparsers = self.parser.add_subparsers(dest="command", required=True)
 
@@ -126,6 +137,8 @@ class SPAKE2PlusCLI:
 
     def run_verifier(self, args):
         ciphersuite = CIPHERSUITE_MAP[args.ciphersuite]()
+        self.logger.debug(f"Ciphersuite: {CIPHERSUITE_COMPLETE_MAP[args.ciphersuite]}")
+        self.logger.info(f"Ciphersuite: {args.ciphersuite}")
         verifier = Verifier(
             args.idProver.encode(),
             args.idVerifier.encode(),
@@ -133,12 +146,14 @@ class SPAKE2PlusCLI:
             ciphersuite.params,
             bytes.fromhex(args.w0),
             decode_point_uncompressed(bytes.fromhex(args.L), ciphersuite.params.curve),
-            self.logger
+            self.logger,
         )
         verifier.start()
 
     def run_prover(self, args):
         ciphersuite = CIPHERSUITE_MAP[args.ciphersuite]()
+        self.logger.debug(f"Ciphersuite: {CIPHERSUITE_COMPLETE_MAP[args.ciphersuite]}")
+        self.logger.info(f"Ciphersuite: {args.ciphersuite}")
         prover = Prover(
             args.idProver.encode(),
             args.idVerifier.encode(),
@@ -146,12 +161,14 @@ class SPAKE2PlusCLI:
             ciphersuite.params,
             bytes.fromhex(args.w0),
             bytes.fromhex(args.w1),
-            self.logger
+            self.logger,
         )
         prover.start()
 
     def run_prover_registration(self, args):
         ciphersuite = CIPHERSUITE_MAP[args.ciphersuite]()
+        self.logger.debug(f"Ciphersuite: {CIPHERSUITE_COMPLETE_MAP[args.ciphersuite]}")
+        self.logger.info(f"Ciphersuite: {args.ciphersuite}")
         prover = Prover(
             args.idProver.encode(),
             args.idVerifier.encode(),
@@ -163,14 +180,13 @@ class SPAKE2PlusCLI:
             None,
         )
         w0, w1, L = prover.registration(args.password)
-        self.logger.info(f"Ciphersuite: {args.ciphersuite}")
         self.logger.info(f"w0 = {w0.hex()}")
         self.logger.info(f"w1 = {w1.hex()}")
         self.logger.info(f"L  = {L.hex()}")
 
     @staticmethod
     def configure_logger(verbosity: int) -> logging.Logger:
-        levels = [logging.WARNING, logging.INFO]
+        levels = [logging.WARNING, logging.INFO, logging.DEBUG]
         level = levels[min(len(levels) - 1, verbosity)]
 
         logger = logging.getLogger("spake2plus")
@@ -179,7 +195,8 @@ class SPAKE2PlusCLI:
         if not logger.handlers:
             handler = logging.StreamHandler()
             formatter = logging.Formatter(
-                "%(asctime)s.%(msecs)03d [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
+                "%(asctime)s.%(msecs)03d [%(levelname)s] %(message)s",
+                datefmt="%Y-%m-%d %H:%M:%S",
             )
             handler.setFormatter(formatter)
             logger.addHandler(handler)
@@ -190,6 +207,7 @@ class SPAKE2PlusCLI:
 def main():
     cli = SPAKE2PlusCLI()
     cli.run()
+
 
 if __name__ == "__main__":
     main()
