@@ -1,10 +1,14 @@
 from spake2plus.exceptions import InvalidInputError
 from spake2plus.role import Role
 from spake2plus.utils import decode_point_uncompressed, encode_point_uncompressed
+from spake2plus.logger_config import get_logger
 from tinyec.ec import Point
 
 import secrets
 import socket
+
+
+logger = get_logger("Verifier")
 
 
 class Verifier(Role):
@@ -46,36 +50,36 @@ class Verifier(Role):
 
     def handle_client(self, conn):
         X = conn.recv(1024)
-        print(f"Received X from Prover: {X.hex()}")
+        logger.info(f"Received X from Prover: {X.hex()}")
         X = decode_point_uncompressed(X, self.params.curve)
-        print(f"X = ({X.x}, {X.y})")
+        logger.debug(f"X = ({X.x}, {X.y})")
 
         Y = self.finish(X)
-        print(f"Y = ({Y.x}, {Y.y})")
+        logger.debug(f"Y = ({Y.x}, {Y.y})")
         Y = encode_point_uncompressed(Y, self.params.curve)
         conn.sendall(Y)
-        print(f"Sent Y to Verifier: {Y.hex()}")
+        logger.info(f"Sent Y to Verifier: {Y.hex()}")
 
-        print("Computing key schedule...")
+        logger.info("Computing key schedule...")
         self.compute_key_schedule()
         confirmV, confirmP = self.confirm()
         conn.sendall(confirmV)
-        print(f"Sent confirmV to Prover: {confirmV.hex()}")
+        logger.info(f"Sent confirmV to Prover: {confirmV.hex()}")
 
         confirmPP = conn.recv(1024)
-        print(f"Received X from Prover: {confirmP.hex()}")
+        logger.info(f"Received X from Prover: {confirmP.hex()}")
 
         assert confirmP == confirmPP
 
-        print(f"Key: {self.shared_key().hex()}")
-        print("Protocol completed successfully.")
+        logger.debug(f"Key: {self.shared_key().hex()}")
+        logger.info("Protocol completed successfully.")
 
     def start(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
             server_socket.bind((self.host, self.port))
             server_socket.listen(1)
-            print(f"Verifier is listening on {self.host}:{self.port}...")
+            logger.info(f"Verifier is listening on {self.host}:{self.port}...")
 
-            conn, addr = server_socket.accept()
+            conn, _ = server_socket.accept()
             with conn:
                 self.handle_client(conn)

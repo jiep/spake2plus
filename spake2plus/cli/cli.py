@@ -8,9 +8,10 @@ from spake2plus.ciphersuites import (
     CiphersuiteP521_SHA512,
 )
 from spake2plus.prover import Prover
-from spake2plus.utils import decode_point_uncompressed, encode_point_uncompressed
+from spake2plus.utils import decode_point_uncompressed
 from spake2plus.verifier import Verifier
 from spake2plus.cli.banner import banner
+from spake2plus.logger_config import get_logger
 
 
 import argparse
@@ -25,6 +26,7 @@ CIPHERSUITE_MAP = {
 
 DEFAULT_CIPHERSUITE = list(CIPHERSUITE_MAP.keys())[0]
 
+logger = get_logger("CLI")
 
 class SPAKE2PlusCLI:
     def __init__(self):
@@ -109,7 +111,7 @@ class SPAKE2PlusCLI:
         )
 
     def run(self, args=None):
-        banner()
+        logger.info(banner())
 
         args = self.parser.parse_args(args)
         if args.command == "verifier":
@@ -156,10 +158,10 @@ class SPAKE2PlusCLI:
             None,
         )
         w0, w1, L = prover.registration(args.password)
-        print(f"Ciphersuite: {args.ciphersuite}")
-        print(f"w0 = {w0.hex()}")
-        print(f"w1 = {w1.hex()}")
-        print(f"L  = {L.hex()}")
+        logger.info(f"Ciphersuite: {args.ciphersuite}")
+        logger.info(f"w0 = {w0.hex()}")
+        logger.info(f"w1 = {w1.hex()}")
+        logger.info(f"L  = {L.hex()}")
 
 
 def main():
