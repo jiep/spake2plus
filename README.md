@@ -80,11 +80,30 @@ pip install -e .
 
 ## Usage
 
+```bash 
+usage: spake2plus [-h] {verifier,prover,registration} ...
+```
+
+### Offline registration
+
+The `Prover` computes the values `w0` and `w1`, as well as the registration record `L`. `w0` and `w1` are derived by hashing the password with the identities of the two participants. `w0` and the record `L` are then shared with the `Verifier`. 
+
 ```bash
-usage: spake2plus [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context CONTEXT --password PASSWORD --salt SALT
-                  [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}]
-                  {prover,verifier}
-spake2plus: error: the following arguments are required: role, --idProver, --idVerifier, --context, --password, --salt
+spake2plus registration --password 1234 --idProver alice --idVerifier bob
+```
+
+### Verifier
+
+```bash
+usage: spake2plus verifier [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context CONTEXT --w0 W0 --L L
+                           [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}]
+```
+
+### Prover
+
+```bash
+usage: spake2plus prover [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context CONTEXT --w0 W0 --w1 W1
+                         [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}]
 ```
 
 ### Example: Verifier
@@ -104,13 +123,11 @@ spake2plus prover --idProver alice --idVerifier bob --context 1234 --password 12
 
 > [!NOTE]  
 > If not specified ciphersuite, `P256-SHA256` is used by default.
+>
 > Ciphersuites allowed: `P256-SHA256`, `P256-SHA512`, `P384-SHA256`, `P384-SHA512`, and `P521-SHA512`.
 
 > [!WARNING]  
-> Salt must have a length of 32 bytes at least!
-
-> [!WARNING]  
-> `idProvider`, `idVerifier`, `context`, `password`, and `salt` must be the same for `Prover` and `Verifier`! 
+> `idProvider`, `idVerifier`, `context`  must be the identical for `Prover` and `Verifier`! 
 
 
 ## Contributing

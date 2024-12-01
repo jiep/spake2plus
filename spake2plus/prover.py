@@ -1,12 +1,38 @@
+import math
 from spake2plus.exceptions import InvalidInputError
+from spake2plus.parameters import Parameters
 from spake2plus.role import Role
-from spake2plus.utils import encode_point_uncompressed, decode_point_uncompressed
+from spake2plus.utils import (
+    encode_point_uncompressed,
+    decode_point_uncompressed,
+    get_len,
+)
+from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
 
 import secrets
 import socket
 
 
+SALT_SIZE = 32
+
+
 class Prover(Role):
+    w1: bytes
+
+    def __init__(
+        self,
+        idProver: bytes,
+        idVerifier: bytes,
+        context: bytes,
+        params: Parameters,
+        w0: bytes,
+        w1: bytes,
+        host: str = "localhost",
+        port: int = 12345,
+    ):
+        super().__init__(idProver, idVerifier, context, params, w0, host, port)
+        self.w1 = w1
+
     def init(self, x=None):
         if not x:
             x = secrets.randbelow(self.params.curve.field.n)
@@ -66,3 +92,40 @@ class Prover(Role):
 
         print(f"Key: {self.shared_key().hex()}")
         print("Protocol completed successfully.")
+
+    def registration(self, password):
+        input_data = (
+            get_len(password)
+            + password.encode("utf-8")
+            + get_len(self.idProver)
+            + self.idProver
+            + get_len(self.idVerifier)
+            + self.idVerifier
+        )
+
+        k = 64
+        output_length = 2 * math.ceil(math.log(self.params.curve.field.n, 2) + k)
+
+        kdf = Argon2id(
+            salt=secrets.token_bytes(SALT_SIZE),
+            length=output_length,
+            iterations=3,
+            lanes=4,
+            memory_cost=2**16,
+            ad=None,
+            secret=None,
+        )
+
+        derived_key = kdf.derive(input_data)
+
+        half_length = len(derived_key) // 2
+        w0s = int.from_bytes(derived_key[:half_length], "big")
+        w1s = int.from_bytes(derived_key[half_length:], "big")
+
+        w0 = w0s % self.params.curve.field.n
+        w1 = w1s % self.params.curve.field.n
+        self.w0 = w0.to_bytes((w0.bit_length() + 7) // 8, "big")
+        self.w1 = w1.to_bytes((w1.bit_length() + 7) // 8, "big")
+        self.L = int.from_bytes(self.w1, byteorder="big") * self.params.P
+
+        return self.w0, self.w1, encode_point_uncompressed(self.L, self.params.curve)

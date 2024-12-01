@@ -1,8 +1,8 @@
 from cryptography.hazmat.primitives import hmac
-from tinyec.ec import Point
+from tinyec.ec import Point, Curve
 
 
-def decode_point_uncompressed(data: bytes, curve) -> tuple:
+def decode_point_uncompressed(data: bytes, curve: Curve) -> tuple:
     coord_size = (curve.field.p.bit_length() + 7) // 8
 
     if len(data) != 1 + 2 * coord_size:

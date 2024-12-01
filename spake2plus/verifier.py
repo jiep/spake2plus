@@ -1,12 +1,27 @@
 from spake2plus.exceptions import InvalidInputError
 from spake2plus.role import Role
 from spake2plus.utils import decode_point_uncompressed, encode_point_uncompressed
+from tinyec.ec import Point
 
 import secrets
 import socket
 
 
 class Verifier(Role):
+    def __init__(
+        self,
+        idProver,
+        idVerifier,
+        context,
+        params,
+        w0: bytes,
+        L: Point,
+        host="localhost",
+        port=12345,
+    ):
+        super().__init__(idProver, idVerifier, context, params, w0, host, port)
+        self.L = L
+
     def finish(self, X, y=None):
         if not y:
             y = secrets.randbelow(self.params.curve.field.n)
