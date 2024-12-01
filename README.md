@@ -162,23 +162,64 @@ options:
 
 ## Examples
 
+### Registration
+
+```bash
+$ spake2plus registration --password superImporT4antPassWord! --idProver alice --idVerifier bob --ciphersuite P256-SHA256
+
+2024-12-01 14:06:51.789 [INFO] Ciphersuite: P256-SHA256
+2024-12-01 14:06:52.048 [INFO] w0 = 3bccdf7f0940907dac69758d327eb9c40c5a7f95ee63a80e042e5473ce789e76
+2024-12-01 14:06:52.048 [INFO] w1 = 59f7bce5c93c087e114d95b542f100124e1814be7f383c376a9a441045092a0b
+2024-12-01 14:06:52.048 [INFO] L  = 04c9b019fbe6d4e727dfd9cd831f3c36a6fec8b05972bed62d3b0493c8cfc2163dc739cda27dcb7aa6726008f7312281d9ffe61edc178af1f26a96a1a6dc6cfbc4
+```
+
 ### Verifier
 
 The `Verifier` acts as a server in the protocol. You can run it as follows:
 
 ```bash
-
-spake2plus -vv --host localhost --port 12346  verifier --id
-Prover alice --idVerifier bob --context CONTEXT --w0 3e056185c79f89457c5c779cc9a293cf8b469cbc927723d25246e60c834d148e --L 04ebca4ccc3b79c84ebcc8b6404f64a2afd11e0b19f545c7972c89612ac127506e99f18708cbab3cc7556439e441a255f0ded53944aaff82367c952b3f87d0e851
+spake2plus verifier --idProver alice --idVerifier bob --context KeyExchange --w0 3bccdf7f0940907dac69758d327eb9c40c5a7f95ee63a80e042e5473ce789e76 --L 04c9b019fbe6d4e727dfd9cd831f3c36a6fec8b05972bed62d3b0493c8cfc2163dc739cda27dcb7aa6726008f7312281d9ffe61edc178af1f26a96a1a6dc6cfbc4 --ciphersuite P256-SHA256
 ```
+
+<details>
+
+<summary>Show output</summary>
+
+```bash
+2024-12-01 14:11:45.727 [INFO] Ciphersuite: P256-SHA256
+2024-12-01 14:11:45.728 [INFO] Verifier is listening on localhost:12345...
+2024-12-01 14:13:04.771 [INFO] P -> V [65]: X = 04dfc96734066fd75a4093d402f33945312f71637c8515524cd44736d0d762cd8a162a72d868fb5e155908f01af1319f69739f6591451ca9978b6bb64a4c4383a8
+2024-12-01 14:13:04.886 [INFO] P <- V [65]: Y = 04835bd8437b2dd3bd920dcbb3aa81c72874e8bdb81aa76c3c2b99a7e9ca22ad397dd844c701eb77264d61f13926a5fc3730d100bb08e4935d770885392d29e1dd
+2024-12-01 14:13:04.887 [INFO] V: Computing key schedule...
+2024-12-01 14:13:04.888 [INFO] P <- V [32]: confirmV = ab44635917470ac4cf52130c881749151e544b8f4fcc987aad2e64afc5201665
+2024-12-01 14:13:04.979 [INFO] P -> V [[32]]: confirmP = d97eba35ac718b69bc8549bb5d73646d42d68739cf392f4d346eab88a6e556a3
+2024-12-01 14:13:04.979 [INFO] V: Protocol completed successfully.
+```
+</details>
 
 ### Prover
 
 The `Prover` acts as a client in the protocol. You can run it as follows:
 
 ```bash
-spake2plus --host localhost --port 12346 -vvv prover --idProver alice --idVerifier bob --context CONTEXT --w0 3e056185c79f89457c5c779cc9a293cf8b469cbc927723d25246e60c834d148e --w1 077e9c258d354634aa264f68e24bb330a1995cf656ad04c9ba999a30491fb339
+spake2plus prover --idProver alice --idVerifier bob --context KeyExchange --w0 3bccdf7f0940907dac69758d327eb9c40c5a7f95ee63a80e042e5473ce789e76 --w1 59f7bce5c93c087e114d95b542f100124e1814be7f383c376a9a441045092a0b --ciphersuite P256-SHA256
 ```
+
+<details>
+
+<summary>Show output</summary>
+
+```bash
+2024-12-01 14:13:04.724 [INFO] Ciphersuite: P256-SHA256
+2024-12-01 14:13:04.725 [INFO] Connected to Verifier at localhost:12345
+2024-12-01 14:13:04.771 [INFO] P -> V [65]: X = 04dfc96734066fd75a4093d402f33945312f71637c8515524cd44736d0d762cd8a162a72d868fb5e155908f01af1319f69739f6591451ca9978b6bb64a4c4383a8]
+2024-12-01 14:13:04.886 [INFO] P <- V [65]: Y = 04835bd8437b2dd3bd920dcbb3aa81c72874e8bdb81aa76c3c2b99a7e9ca22ad397dd844c701eb77264d61f13926a5fc3730d100bb08e4935d770885392d29e1dd
+2024-12-01 14:13:04.977 [INFO] P: Computing key schedule...
+2024-12-01 14:13:04.979 [INFO] P <- V [32]: confirmV = ab44635917470ac4cf52130c881749151e544b8f4fcc987aad2e64afc5201665
+2024-12-01 14:13:04.979 [INFO] P -> V [32]: confirmP = d97eba35ac718b69bc8549bb5d73646d42d68739cf392f4d346eab88a6e556a3
+2024-12-01 14:13:04.979 [INFO] P: Protocol completed successfully.
+```
+</details>
 
 > [!NOTE]  
 > If not specified ciphersuite, `P256-SHA256` is used by default.
