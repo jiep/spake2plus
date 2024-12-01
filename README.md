@@ -270,47 +270,50 @@ spake2plus prover --idProver alice --idVerifier bob --context KeyExchange --w0 3
 
 <details>
 
-<summary>Show values for `N` and `M`</summary>
+<summary>Show values for N and M</summary>
 
 - `P-256`
 
-```
-M =
-02886e2f97ace46e55ba9dd7242579f2993b64e16ef3dcab95afd497333d8fa12f
-seed: 1.2.840.10045.3.1.7 point generation seed (M)
+  ```
+  M = 02886e2f97ace46e55ba9dd7242579f2993b64e16ef3dcab95afd497333d8fa12f
 
-N =
-03d8bbd6c639c62937b04d997f38c3770719c629d7014d49a24b4f98baa1292b49
-seed: 1.2.840.10045.3.1.7 point generation seed (N)
-```
+  seed: 1.2.840.10045.3.1.7 point generation seed (M)
+  ```
+
+  ```
+  N = 03d8bbd6c639c62937b04d997f38c3770719c629d7014d49a24b4f98baa1292b49
+
+  seed: 1.2.840.10045.3.1.7 point generation seed (N)
+  ```
 
 - `P-384`
 
-```
-M =
-030ff0895ae5ebf6187080a82d82b42e2765e3b2f8749c7e05eba366434b363d3dc
-36f15314739074d2eb8613fceec2853
-seed: 1.3.132.0.34 point generation seed (M)
+  ```
+  M = 030ff0895ae5ebf6187080a82d82b42e2765e3b2f8749c7e05eba366434b363d3dc36f15314739074d2eb8613fceec2853
 
-N =
-02c72cf2e390853a1c1c4ad816a62fd15824f56078918f43f922ca21518f9c543bb
-252c5490214cf9aa3f0baab4b665c10
-seed: 1.3.132.0.34 point generation seed (N)
-```
+  seed: 1.3.132.0.34 point generation seed (M)
+  ```
+
+  ```
+  N = 02c72cf2e390853a1c1c4ad816a62fd15824f56078918f43f922ca21518f9c543bb252c5490214cf9aa3f0baab4b665c10
+
+  seed: 1.3.132.0.34 point generation seed (N)
+  ```
 
 - `P-521`
 
-```
-M =
-02003f06f38131b2ba2600791e82488e8d20ab889af753a41806c5db18d37d85608
-cfae06b82e4a72cd744c719193562a653ea1f119eef9356907edc9b56979962d7aa
-seed: 1.3.132.0.35 point generation seed (M)
+  ```
+  M =
+  02003f06f38131b2ba2600791e82488e8d20ab889af753a41806c5db18d37d85608cfae06b82e4a72cd744c719193562a653ea1f119eef9356907edc9b56979962d7aa
 
-N =
-0200c7924b9ec017f3094562894336a53c50167ba8c5963876880542bc669e494b25
-32d76c5b53dfb349fdf69154b9e0048c58a42e8ed04cef052a3bc349d95575cd25
-seed: 1.3.132.0.35 point generation seed (N)
-```
+  seed: 1.3.132.0.35 point generation seed (M)
+  ```
+
+  ```
+  N = 0200c7924b9ec017f3094562894336a53c50167ba8c5963876880542bc669e494b2532d76c5b53dfb349fdf69154b9e0048c58a42e8ed04cef052a3bc349d95575cd25
+
+  seed: 1.3.132.0.35 point generation seed (N)
+  ```
 
 </details>
 
