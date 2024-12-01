@@ -17,7 +17,7 @@ class SPAKE2PLUS:
         L: Point,
         context: bytes,
         x: bytes,
-        y: bytes
+        y: bytes,
     ):
         self.params = params
         self.idProver = idProver
@@ -27,7 +27,6 @@ class SPAKE2PLUS:
         self.prover = Prover(idProver, idVerifier, context, params, w0, w1)
 
         self.verifier = Verifier(idProver, idVerifier, context, params, w0, L)
-        print("w000000", self.prover.w1)
         X = self.prover.init(x)
         Y = self.verifier.finish(X, y)
 

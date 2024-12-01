@@ -88,7 +88,6 @@ class Role:
     def check(self, confirmV, confirmP):
         return self.confirmV == confirmV and self.confirmP == confirmP
 
-
     def is_in_subgroup(self, X: Point):
         infinity = Inf(self.params.curve)
         check1 = X.on_curve

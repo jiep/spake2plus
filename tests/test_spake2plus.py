@@ -147,7 +147,6 @@ def test_random():
     w1 = bytes.fromhex(w1)
     L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
 
-
     protocol = SPAKE2PLUS(
         ciphersuite.params, idProver, idVerifier, w0, w1, L, context, x, y
     )

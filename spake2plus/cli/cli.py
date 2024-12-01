@@ -25,6 +25,7 @@ CIPHERSUITE_MAP = {
 
 DEFAULT_CIPHERSUITE = list(CIPHERSUITE_MAP.keys())[0]
 
+
 class SPAKE2PlusCLI:
     def __init__(self):
         self.parser = argparse.ArgumentParser(description="SPAKE2+ Protocol")
@@ -126,7 +127,7 @@ class SPAKE2PlusCLI:
             args.context.encode(),
             ciphersuite.params,
             bytes.fromhex(args.w0),
-            decode_point_uncompressed(bytes.fromhex(args.L), ciphersuite.params.curve)
+            decode_point_uncompressed(bytes.fromhex(args.L), ciphersuite.params.curve),
         )
         verifier.start()
 
@@ -138,7 +139,7 @@ class SPAKE2PlusCLI:
             args.context.encode(),
             ciphersuite.params,
             bytes.fromhex(args.w0),
-            bytes.fromhex(args.w1)
+            bytes.fromhex(args.w1),
         )
         prover.start()
 
