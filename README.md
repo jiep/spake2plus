@@ -81,19 +81,26 @@ pip install -e .
 ## Usage
 
 ```bash 
-usage: spake2plus [-h] [-v] {verifier,prover,registration} ...
+usage: spake2plus [-h] [-v] [--host HOST] [--port PORT]
+                  {verifier,prover,registration} ...
 
 SPAKE2+ Protocol
 
 positional arguments:
   {verifier,prover,registration}
-    verifier            Run the verifier role in the SPAKE2+ protocol
-    prover              Run the prover role in the SPAKE2+ protocol
+    verifier            Run the verifier role in the
+                        SPAKE2+ protocol
+    prover              Run the prover role in the SPAKE2+
+                        protocol
     registration        Perform registration for the Prover
 
 options:
   -h, --help            show this help message and exit
-  -v, --verbose         Increase output verbosity (e.g., -v, -vv, -vvv)
+  -v, --verbose         Increase output verbosity (e.g.,
+                        -v, -vv, -vvv)
+  --host HOST           Host to connect to (default:
+                        localhost)
+  --port PORT           Port to connect to (default: 12345)
 ```
 
 ### Offline registration
@@ -153,19 +160,24 @@ options:
                         Ciphersuite to use (default: P256-SHA256)
 ```
 
-### Example: Verifier
+## Examples
+
+### Verifier
 
 The `Verifier` acts as a server in the protocol. You can run it as follows:
 
 ```bash
 
-spake2plus verifier  --idProver alice --idVerifier bob --context 1234 --password 1234 --salt 12341234
+spake2plus -vv --host localhost --port 12346  verifier --id
+Prover alice --idVerifier bob --context CONTEXT --w0 3e056185c79f89457c5c779cc9a293cf8b469cbc927723d25246e60c834d148e --L 04ebca4ccc3b79c84ebcc8b6404f64a2afd11e0b19f545c7972c89612ac127506e99f18708cbab3cc7556439e441a255f0ded53944aaff82367c952b3f87d0e851
 ```
+
+### Prover
 
 The `Prover` acts as a client in the protocol. You can run it as follows:
 
 ```bash
-spake2plus prover --idProver alice --idVerifier bob --context 1234 --password 1234 --salt 12341234
+spake2plus --host localhost --port 12346 -vvv prover --idProver alice --idVerifier bob --context CONTEXT --w0 3e056185c79f89457c5c779cc9a293cf8b469cbc927723d25246e60c834d148e --w1 077e9c258d354634aa264f68e24bb330a1995cf656ad04c9ba999a30491fb339
 ```
 
 > [!NOTE]  
