@@ -38,10 +38,11 @@ sequenceDiagram
     participant Prover
     participant Verifier
 
-    Note over Prover, Verifier: password
-    Prover<<->>Verifier: Registration
+    Note left of Prover: password
 
-    Note over Prover, Verifier: w0, w1
+    Note left of Prover: w0, w1 <- Argon2id(password)<br/> L = w1*P
+
+    Prover->>Verifier: Offline Registration<br/>w0, L
 
     Note left of Prover: x <- [0, p-1]<br/>X = x*P + w0*M
     Prover->>Verifier: X
@@ -50,7 +51,7 @@ sequenceDiagram
     Note left of Prover: Z = h*x*(Y - w0*N)<br/>V = h*w1*(Y - w0*N)
     Note right of Verifier: Z = h*y*(X - w0*M)<br/>V = h*y*L
 
-    Note over Prover,Verifier: Compute transcript TT<br/>K_main = Hash(TT)<br/>K_confirmP || K_confirmV = KDF(nil, K_main, "ConfirmationKeys")<br/>K_shared = KDF(nil, K_main, "SharedKey")
+    Note over Prover,Verifier: Compute transcript TT<br/>K_main = Hash(TT)<br/>K_confirmP || K_confirmV = KDF(K_main, "ConfirmationKeys")<br/>K_shared = KDF(K_main, "SharedKey")
     
     Note right of Verifier: confirmP = MAC(K_confirmV, Y)
 
