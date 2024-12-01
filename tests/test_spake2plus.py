@@ -9,6 +9,7 @@ from spake2plus.ciphersuites import (
 
 
 def test_p256():
+    ciphersuite = CiphersuiteP256_SHA256()
     context = b"SPAKE2+-P256-SHA256-HKDF-SHA256-HMAC-SHA256 Test Vectors"
     idProver = b"client"
     idVerifier = b"server"
@@ -20,12 +21,12 @@ def test_p256():
 
     w0 = bytes.fromhex(w0)
     w1 = bytes.fromhex(w1)
+    L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
     x = int(x, 16)
     y = int(y, 16)
 
-    ciphersuite = CiphersuiteP256_SHA256()
     protocol = SPAKE2PLUS(
-        ciphersuite.params, idProver, idVerifier, w0, w1, context, x, y
+        ciphersuite.params, idProver, idVerifier, w0, w1, L, context, x, y
     )
 
     assert protocol.prover.shared_key().hex() == K_shared
@@ -33,6 +34,7 @@ def test_p256():
 
 
 def test_p256_2():
+    ciphersuite = CiphersuiteP256_SHA512()
     context = b"SPAKE2+-P256-SHA512-HKDF-SHA512-HMAC-SHA512 Test Vectors"
     idProver = b"client"
     idVerifier = b"server"
@@ -44,12 +46,12 @@ def test_p256_2():
 
     w0 = bytes.fromhex(w0)
     w1 = bytes.fromhex(w1)
+    L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
     x = int(x, 16)
     y = int(y, 16)
 
-    ciphersuite = CiphersuiteP256_SHA512()
     protocol = SPAKE2PLUS(
-        ciphersuite.params, idProver, idVerifier, w0, w1, context, x, y
+        ciphersuite.params, idProver, idVerifier, w0, w1, L, context, x, y
     )
 
     assert protocol.prover.shared_key().hex() == K_shared
@@ -57,6 +59,7 @@ def test_p256_2():
 
 
 def test_p384():
+    ciphersuite = CiphersuiteP384_SHA256()
     context = b"SPAKE2+-P384-SHA256-HKDF-SHA256-HMAC-SHA256 Test Vectors"
     idProver = b"client"
     idVerifier = b"server"
@@ -68,12 +71,12 @@ def test_p384():
 
     w0 = bytes.fromhex(w0)
     w1 = bytes.fromhex(w1)
+    L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
     x = int(x, 16)
     y = int(y, 16)
 
-    ciphersuite = CiphersuiteP384_SHA256()
     protocol = SPAKE2PLUS(
-        ciphersuite.params, idProver, idVerifier, w0, w1, context, x, y
+        ciphersuite.params, idProver, idVerifier, w0, w1, L, context, x, y
     )
 
     assert protocol.prover.shared_key().hex() == K_shared
@@ -81,6 +84,7 @@ def test_p384():
 
 
 def test_p384_2():
+    ciphersuite = CiphersuiteP384_SHA512()
     context = b"SPAKE2+-P384-SHA512-HKDF-SHA512-HMAC-SHA512 Test Vectors"
     idProver = b"client"
     idVerifier = b"server"
@@ -92,12 +96,12 @@ def test_p384_2():
 
     w0 = bytes.fromhex(w0)
     w1 = bytes.fromhex(w1)
+    L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
     x = int(x, 16)
     y = int(y, 16)
 
-    ciphersuite = CiphersuiteP384_SHA512()
     protocol = SPAKE2PLUS(
-        ciphersuite.params, idProver, idVerifier, w0, w1, context, x, y
+        ciphersuite.params, idProver, idVerifier, w0, w1, L, context, x, y
     )
 
     assert protocol.prover.shared_key().hex() == K_shared
@@ -105,6 +109,7 @@ def test_p384_2():
 
 
 def test_p521():
+    ciphersuite = CiphersuiteP521_SHA512()
     context = b"SPAKE2+-P521-SHA512-HKDF-SHA512-HMAC-SHA512 Test Vectors"
     idProver = b"client"
     idVerifier = b"server"
@@ -116,12 +121,12 @@ def test_p521():
 
     w0 = bytes.fromhex(w0)
     w1 = bytes.fromhex(w1)
+    L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
     x = int(x, 16)
     y = int(y, 16)
 
-    ciphersuite = CiphersuiteP521_SHA512()
     protocol = SPAKE2PLUS(
-        ciphersuite.params, idProver, idVerifier, w0, w1, context, x, y
+        ciphersuite.params, idProver, idVerifier, w0, w1, L, context, x, y
     )
 
     assert protocol.prover.shared_key().hex() == K_shared
@@ -129,6 +134,7 @@ def test_p521():
 
 
 def test_random():
+    ciphersuite = CiphersuiteP256_SHA256()
     context = b"SPAKE2+-P256-SHA256-HKDF-SHA256-HMAC-SHA256 Random Values"
     idProver = b"alice"
     idVerifier = b"bob"
@@ -139,10 +145,10 @@ def test_random():
 
     w0 = bytes.fromhex(w0)
     w1 = bytes.fromhex(w1)
+    L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
 
-    ciphersuite = CiphersuiteP256_SHA256()
     protocol = SPAKE2PLUS(
-        ciphersuite.params, idProver, idVerifier, w0, w1, context, x, y
+        ciphersuite.params, idProver, idVerifier, w0, w1, L, context, x, y
     )
 
     assert protocol.prover.shared_key().hex() == protocol.verifier.shared_key().hex()
