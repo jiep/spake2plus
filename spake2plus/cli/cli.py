@@ -42,6 +42,14 @@ class SPAKE2PlusCLI:
             default=1,
             help="Increase output verbosity (e.g., -v, -vv, -vvv)",
         )
+
+        self.parser.add_argument(
+            "--host", default="localhost", help="Host to connect to (default: localhost)"
+        )
+        self.parser.add_argument(
+            "--port", type=int, default=12345, help="Port to connect to (default: 12345)"
+        )
+
         self.subparsers = self.parser.add_subparsers(dest="command", required=True)
 
         self._add_verifier_command()
@@ -147,6 +155,8 @@ class SPAKE2PlusCLI:
             bytes.fromhex(args.w0),
             decode_point_uncompressed(bytes.fromhex(args.L), ciphersuite.params.curve),
             self.logger,
+            args.host,
+            args.port
         )
         verifier.start()
 
@@ -162,6 +172,8 @@ class SPAKE2PlusCLI:
             bytes.fromhex(args.w0),
             bytes.fromhex(args.w1),
             self.logger,
+            args.host,
+            args.port
         )
         prover.start()
 
