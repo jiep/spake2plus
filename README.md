@@ -231,6 +231,94 @@ spake2plus prover --idProver alice --idVerifier bob --context KeyExchange --w0 3
 > `idProvider`, `idVerifier`, `context`  must be the identical for `Prover` and `Verifier`! 
 
 
+## Ciphersuites
+
+| Ciphersuite     | G            | Hash              | KDF                   | MAC                   | PBKDF              |
+|-----------------|--------------|-------------------|-----------------------|-----------------------|--------------------|
+| `P256-SHA256`   | P-256        | SHA256 [RFC6234]  | HKDF-SHA256 [RFC5869] | HMAC-SHA256 [RFC2104] | Argon2id [RFC9106] |
+| `P256-SHA512`   | P-256        | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
+| `P384-SHA256`   | P-384        | SHA256 [RFC6234]  | HKDF-SHA256 [RFC5869] | HMAC-SHA256 [RFC2104] | Argon2id [RFC9106] |
+| `P384-SHA512`   | P-384        | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
+| `P521-SHA512`   | P-521        | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
+
+<details>
+
+<summary>Show references</summary>
+
+- [RFC6234] Eastlake 3rd, D. and T. Hansen, "US Secure Hash Algorithms
+            (SHA and SHA-based HMAC and HKDF)", RFC 6234,
+            DOI 10.17487/RFC6234, May 2011,
+            https://www.rfc-editor.org/info/rfc6234
+
+- [RFC5869] Krawczyk, H. and P. Eronen, "HMAC-based Extract-and-Expand
+            Key Derivation Function (HKDF)", RFC 5869,
+            DOI 10.17487/RFC5869, May 2010,
+            https://www.rfc-editor.org/info/rfc5869
+
+- [RFC2104] Krawczyk, H., Bellare, M., and R. Canetti, "HMAC: Keyed-
+            Hashing for Message Authentication", RFC 2104,
+            DOI 10.17487/RFC2104, February 1997,
+            https://www.rfc-editor.org/info/rfc2104
+
+- [RFC9106] Biryukov, A., Dinu, D., Khovratovich, D., and S.
+            Josefsson, "Argon2 Memory-Hard Function for Password
+            Hashing and Proof-of-Work Applications", RFC 9106,
+            DOI 10.17487/RFC9106, September 2021,
+            https://www.rfc-editor.org/info/rfc9106
+
+</details>
+
+<details>
+
+<summary>Show values for N and M</summary>
+
+- `P-256`
+
+  ```
+  M = 02886e2f97ace46e55ba9dd7242579f2993b64e16ef3dcab95afd497333d8fa12f
+
+  seed: 1.2.840.10045.3.1.7 point generation seed (M)
+  ```
+
+  ```
+  N = 03d8bbd6c639c62937b04d997f38c3770719c629d7014d49a24b4f98baa1292b49
+
+  seed: 1.2.840.10045.3.1.7 point generation seed (N)
+  ```
+
+- `P-384`
+
+  ```
+  M = 030ff0895ae5ebf6187080a82d82b42e2765e3b2f8749c7e05eba366434b363d3dc36f15314739074d2eb8613fceec2853
+
+  seed: 1.3.132.0.34 point generation seed (M)
+  ```
+
+  ```
+  N = 02c72cf2e390853a1c1c4ad816a62fd15824f56078918f43f922ca21518f9c543bb252c5490214cf9aa3f0baab4b665c10
+
+  seed: 1.3.132.0.34 point generation seed (N)
+  ```
+
+- `P-521`
+
+  ```
+  M =
+  02003f06f38131b2ba2600791e82488e8d20ab889af753a41806c5db18d37d85608cfae06b82e4a72cd744c719193562a653ea1f119eef9356907edc9b56979962d7aa
+
+  seed: 1.3.132.0.35 point generation seed (M)
+  ```
+
+  ```
+  N = 0200c7924b9ec017f3094562894336a53c50167ba8c5963876880542bc669e494b2532d76c5b53dfb349fdf69154b9e0048c58a42e8ed04cef052a3bc349d95575cd25
+
+  seed: 1.3.132.0.35 point generation seed (N)
+  ```
+
+</details>
+
+
+
 ## Contributing
 
 Contributions are welcome! To contribute, follow these steps:
