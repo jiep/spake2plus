@@ -8,7 +8,7 @@ from spake2plus.ciphersuites import (
     CiphersuiteP521_SHA512,
 )
 from spake2plus.prover import Prover
-from spake2plus.utils import encode_point_uncompressed
+from spake2plus.utils import decode_point_uncompressed, encode_point_uncompressed
 from spake2plus.verifier import Verifier
 from spake2plus.cli.banner import banner
 
@@ -24,7 +24,6 @@ CIPHERSUITE_MAP = {
 }
 
 DEFAULT_CIPHERSUITE = list(CIPHERSUITE_MAP.keys())[0]
-
 
 class SPAKE2PlusCLI:
     def __init__(self):
@@ -49,10 +48,10 @@ class SPAKE2PlusCLI:
             "--context", required=True, help="Protocol context"
         )
         parser_verifier.add_argument(
-            "--password", required=True, help="Shared password"
+            "--w0", required=True, help="Value for w0 as hexadecimal string"
         )
         parser_verifier.add_argument(
-            "--salt", required=True, help="Salt for key derivation"
+            "--L", required=True, help="Value for L as hexadecimal string"
         )
         parser_verifier.add_argument(
             "--ciphersuite",
@@ -73,9 +72,11 @@ class SPAKE2PlusCLI:
             "--idVerifier", required=True, help="Verifier's identity"
         )
         parser_prover.add_argument("--context", required=True, help="Protocol context")
-        parser_prover.add_argument("--password", required=True, help="Shared password")
         parser_prover.add_argument(
-            "--salt", required=True, help="Salt for key derivation"
+            "--w0", required=True, help="Value for w0 as hexadecimal string"
+        )
+        parser_prover.add_argument(
+            "--w1", required=True, help="Value for w1 as hexadecimal string"
         )
         parser_prover.add_argument(
             "--ciphersuite",
@@ -122,10 +123,10 @@ class SPAKE2PlusCLI:
         verifier = Verifier(
             args.idProver.encode(),
             args.idVerifier.encode(),
-            args.password,
-            args.salt.encode(),
             args.context.encode(),
             ciphersuite.params,
+            bytes.fromhex(args.w0),
+            decode_point_uncompressed(bytes.fromhex(args.L), ciphersuite.params.curve)
         )
         verifier.start()
 
@@ -134,10 +135,10 @@ class SPAKE2PlusCLI:
         prover = Prover(
             args.idProver.encode(),
             args.idVerifier.encode(),
-            args.password,
-            args.salt.encode(),
             args.context.encode(),
             ciphersuite.params,
+            bytes.fromhex(args.w0),
+            bytes.fromhex(args.w1)
         )
         prover.start()
 
@@ -147,12 +148,14 @@ class SPAKE2PlusCLI:
         prover = Prover(
             args.idProver.encode(),
             args.idVerifier.encode(),
-            args.password,
-            None,
             None,
             ciphersuite.params,
+            None,
+            None,
+            None,
         )
         w0, w1, L = prover.registration(args.password)
+        print(f"Ciphersuite: {args.ciphersuite}")
         print(f"w0 = {w0.hex()}")
         print(f"w1 = {w1.hex()}")
         print(f"L  = {L.hex()}")
