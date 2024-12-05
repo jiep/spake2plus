@@ -53,10 +53,10 @@ sequenceDiagram
 
     Note over Prover,Verifier: Compute transcript TT<br/>K_main = Hash(TT)<br/>K_confirmP || K_confirmV = KDF(K_main, "ConfirmationKeys")<br/>K_shared = KDF(K_main, "SharedKey")
     
-    Note right of Verifier: confirmP = MAC(K_confirmV, Y)
+    Note right of Verifier: confirmV = MAC(K_confirmV, Y)
 
     Verifier->>Prover: confirmV
-    Note left of Prover: confirmV = MAC(K_confirmV, X)<br/>expected_confirmV = MAC(K_confirmV, X)<br/>equal_constant_time(expected_confirmV, confirmV)
+    Note left of Prover: confirmP = MAC(K_confirmP, X)<br/>expected_confirmV = MAC(K_confirmV, X)<br/>equal_constant_time(expected_confirmV, confirmV)
     Prover->>Verifier: confirmP
 
     Note right of Verifier: expected_confirmP = MAC(K_confirmP, Y)<br/>equal_constant_time(expected_confirmP, confirmP)
