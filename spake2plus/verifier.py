@@ -90,4 +90,3 @@ class Verifier(Role):
                 self.logger.debug("V: Stopping server...")
                 self.logger.info("V: Exiting...")
                 sys.exit(0)
-            
