@@ -1,0 +1,36 @@
+name: Create GitHub Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Python Setup and Install Dependencies
+      uses: ./.github/actions/python-setup-action
+      with:
+        python-version: "3.12"
+
+    - name: Build the package
+      run: python -m build
+
+    - name: Create GitHub Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "dist/*"
+        generateReleaseNotes: true
+
+    - name: Upload Release Assets
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        asset_path: dist/  # Ruta a los artefactos generados
+        asset_name: ""  # Nombre del archivo (puedes especificar un nombre si es necesario)
+        asset_content_type: application/octet-stream  # Tipo de contenido del archivo
