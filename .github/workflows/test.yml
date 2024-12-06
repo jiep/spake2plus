@@ -13,6 +13,9 @@ jobs:
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
     - name: Python Setup
       uses: ./.github/actions/python-setup-action
       with:
