@@ -21,6 +21,6 @@ dynamic = ["version", "dependencies", "optional-dependencies"]
 [tool.setuptools.dynamic]
 version = {attr = "spake2plus.__version__"}
 dependencies = {file = ["requirements.txt"]}
-optional-dependencies = {dev = { file = ["requirements-dev.txt"] }}
+optional-dependencies = {dev = { file = ["requirements-dev.txt"] }, build = { file = ["requirements-build.txt"] }}
 [project.scripts]
 spake2plus = "spake2plus.cli.cli:main"
