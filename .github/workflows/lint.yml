@@ -8,9 +8,13 @@ on:
 
 jobs:
   lint:
-    uses: ./.github/workflows/python-setup.yml
-
+    runs-on: ubuntu-latest
     steps:
+    - name: Python Setup
+      uses: ./.github/actions/python-setup-action
+      with:
+        python-version: '3.12'
+
     - name: Check code formatting with Black
       run: black --check .
 
