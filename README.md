@@ -73,8 +73,8 @@ sequenceDiagram
 
 This package requires the following dependencies:
 
-* `cryptography==44.0.0`
-* `tinyec==0.4.0`
+* [`cryptography`](https://pypi.org/project/cryptography/)
+* [`tinyec`](https://pypi.org/project/tinyec/)
 
 All dependencies are automatically installed when you install the package via `pip`.
 
