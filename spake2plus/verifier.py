@@ -6,6 +6,7 @@ from tinyec.ec import Point
 import secrets
 import socket
 
+BUFFER_SIZE = 1024
 
 class Verifier(Role):
     def __init__(
@@ -46,7 +47,7 @@ class Verifier(Role):
         return self.Y
 
     def handle_client(self, conn):
-        X = conn.recv(1024)
+        X = conn.recv(BUFFER_SIZE)
         self.logger.info(f"P -> V [{len(X)}]: X = {X.hex()}")
         X = decode_point_uncompressed(X, self.params.curve)
         self.logger.debug(f"V: X = ({X.x}, {X.y})")
@@ -63,7 +64,7 @@ class Verifier(Role):
         conn.sendall(confirmV)
         self.logger.info(f"P <- V [{len(confirmV)}]: confirmV = {confirmV.hex()}")
 
-        confirmPP = conn.recv(1024)
+        confirmPP = conn.recv(BUFFER_SIZE)
         self.logger.info(f"P -> V [[{len(confirmP)}]]: confirmP = {confirmP.hex()}")
 
         assert confirmP == confirmPP
