@@ -160,7 +160,7 @@ def test_random():
 
 
 def test_incorrect_message():
-    
+
     with pytest.raises(InvalidInputError):
 
         ciphersuite = CiphersuiteP256_SHA256()
@@ -177,16 +177,19 @@ def test_incorrect_message():
         L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
 
         prover = Prover(idProver, idVerifier, context, ciphersuite.params, w0, w1, None)
-        verifier = Verifier(idProver, idVerifier, context, ciphersuite.params, w0, L, None)
+        verifier = Verifier(
+            idProver, idVerifier, context, ciphersuite.params, w0, L, None
+        )
         X = prover.init(x)
         X_encoded = bytearray(encode_point_uncompressed(X, ciphersuite.params.curve))
-        X_encoded[5] = X_encoded[5] ^ 0x56 # modified message X
+        X_encoded[5] = X_encoded[5] ^ 0x56  # modified message X
         X = bytes(X_encoded)
         X = decode_point_uncompressed(X, ciphersuite.params.curve)
         Y = verifier.finish(X, y)
 
+
 def test_incorrect_message2():
-    
+
     with pytest.raises(InvalidInputError):
 
         ciphersuite = CiphersuiteP256_SHA256()
@@ -203,12 +206,14 @@ def test_incorrect_message2():
         L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
 
         prover = Prover(idProver, idVerifier, context, ciphersuite.params, w0, w1, None)
-        verifier = Verifier(idProver, idVerifier, context, ciphersuite.params, w0, L, None)
+        verifier = Verifier(
+            idProver, idVerifier, context, ciphersuite.params, w0, L, None
+        )
         X = prover.init(x)
         Y = verifier.finish(X, y)
 
         Y_encoded = bytearray(encode_point_uncompressed(Y, ciphersuite.params.curve))
-        Y_encoded[5] = Y_encoded[5] ^ 0x32 # modified message Y
+        Y_encoded[5] = Y_encoded[5] ^ 0x32  # modified message Y
         Y = bytes(Y_encoded)
         Y = decode_point_uncompressed(Y, ciphersuite.params.curve)
 
@@ -218,7 +223,7 @@ def test_incorrect_message2():
 def test_incorrect_message3():
 
     with pytest.raises(ConfirmingError):
-    
+
         ciphersuite = CiphersuiteP256_SHA256()
         context = b"SPAKE2+-P256-SHA256-HKDF-SHA256-HMAC-SHA256 Random Values"
         idProver = b"alice"
@@ -233,11 +238,15 @@ def test_incorrect_message3():
         L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
 
         prover = Prover(idProver, idVerifier, context, ciphersuite.params, w0, w1, None)
-        verifier = Verifier(idProver, idVerifier, context, ciphersuite.params, w0, L, None)
+        verifier = Verifier(
+            idProver, idVerifier, context, ciphersuite.params, w0, L, None
+        )
         X = prover.init(x)
         Y = verifier.finish(X, y)
 
-        Y = bytes.fromhex("04835bd8437b2dd3bd920dcbb3aa81c72874e8bdb81aa76c3c2b99a7e9ca22ad397dd844c701eb77264d61f13926a5fc3730d100bb08e4935d770885392d29e1dd")
+        Y = bytes.fromhex(
+            "04835bd8437b2dd3bd920dcbb3aa81c72874e8bdb81aa76c3c2b99a7e9ca22ad397dd844c701eb77264d61f13926a5fc3730d100bb08e4935d770885392d29e1dd"
+        )
         Y = decode_point_uncompressed(Y, ciphersuite.params.curve)
 
         prover.finish(Y)
@@ -253,10 +262,11 @@ def test_incorrect_message3():
         ):
             raise ConfirmingError("error confirming")
 
+
 def test_incorrect_message4():
 
     with pytest.raises(ConfirmingError):
-    
+
         ciphersuite = CiphersuiteP256_SHA256()
         context = b"SPAKE2+-P256-SHA256-HKDF-SHA256-HMAC-SHA256 Random Values"
         idProver = b"alice"
@@ -271,9 +281,13 @@ def test_incorrect_message4():
         L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
 
         prover = Prover(idProver, idVerifier, context, ciphersuite.params, w0, w1, None)
-        verifier = Verifier(idProver, idVerifier, context, ciphersuite.params, w0, L, None)
+        verifier = Verifier(
+            idProver, idVerifier, context, ciphersuite.params, w0, L, None
+        )
         X = prover.init(x)
-        X = bytes.fromhex("04835bd8437b2dd3bd920dcbb3aa81c72874e8bdb81aa76c3c2b99a7e9ca22ad397dd844c701eb77264d61f13926a5fc3730d100bb08e4935d770885392d29e1dd")
+        X = bytes.fromhex(
+            "04835bd8437b2dd3bd920dcbb3aa81c72874e8bdb81aa76c3c2b99a7e9ca22ad397dd844c701eb77264d61f13926a5fc3730d100bb08e4935d770885392d29e1dd"
+        )
         X = decode_point_uncompressed(X, ciphersuite.params.curve)
         Y = verifier.finish(X, y)
 
