@@ -5,8 +5,15 @@
 [![Build Wheel](https://github.com/jiep/spake2plus/actions/workflows/wheel.yml/badge.svg)](https://github.com/jiep/spake2plus/actions/workflows/wheel.yml)
 [![Dependabot Updates](https://github.com/jiep/spake2plus/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/jiep/spake2plus/actions/workflows/dependabot/dependabot-updates)
 
+<p align="center">
+  <img src="./docs/images/logo.png" width="25%"/>
+</p>
+
 **SPAKE2+** is a Python 3 implementation of SPAKE2+ protocol, according to [RFC 9383
 SPAKE2+, an Augmented Password-Authenticated Key Exchange (PAKE) Protocol](https://www.rfc-editor.org/rfc/rfc9383.html).
+
+> [!CAUTION]
+This code has not been audited or formally reviewed for security. Use it at your own risk and only for educational purposes or in non-critical environments.
 
 ## What is SPAKE2+?
 
@@ -333,7 +340,6 @@ Contributions are welcome! To contribute, follow these steps:
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-## Disclaimer
+## Logo
 
-> [!CAUTION]
-This code has not been audited or formally reviewed for security. Use it at your own risk and only for educational purposes or in non-critical environments.
+The logo used in this project was automatically created by **ChatGPT**. This process involves a combination of creative design assisted by AI to provide a visual representation of the project.
