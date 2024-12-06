@@ -1,7 +1,7 @@
-from spake2plus.parameters import Parameters
-from spake2plus.prover import Prover
-from spake2plus.verifier import Verifier
-from spake2plus.exceptions import ConfirmingError
+from spake2plus.protocol.parameters import Parameters
+from spake2plus.roles.prover import Prover
+from spake2plus.roles.verifier import Verifier
+from spake2plus.exceptions.exceptions import ConfirmingError
 
 from tinyec.ec import Point
 

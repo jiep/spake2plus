@@ -2,8 +2,8 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from tinyec.ec import Point, Inf
 
-from spake2plus.parameters import Parameters
-from spake2plus.utils import encode_point_uncompressed, get_len, mac
+from spake2plus.protocol.parameters import Parameters
+from spake2plus.utils.utils import encode_point_uncompressed, get_len, mac
 
 
 class Role:

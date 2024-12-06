@@ -1,5 +1,5 @@
-from spake2plus.exceptions import InvalidInputError
-from spake2plus.parameters import Parameters
+from spake2plus.exceptions.exceptions import InvalidInputError
+from spake2plus.protocol.parameters import Parameters
 from tinyec import registry
 from tinyec.ec import Point
 from cryptography.hazmat.primitives import hashes

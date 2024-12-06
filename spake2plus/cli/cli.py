@@ -7,9 +7,9 @@ from spake2plus.cli.constants import (
     DEFAULT_CIPHERSUITE,
 )
 
-from spake2plus.prover import Prover
-from spake2plus.verifier import Verifier
-from spake2plus.utils import decode_point_uncompressed
+from spake2plus.roles.prover import Prover
+from spake2plus.roles.verifier import Verifier
+from spake2plus.utils.utils import decode_point_uncompressed
 
 
 class SPAKE2PlusCLI:
