@@ -1,14 +1,31 @@
-name: Create GitHub Release
+name: CI, Build, Test, Lint, and Release
 
 on:
   push:
+    branches:
+      - main
     tags:
       - "v*"
+  pull_request:
+    branches:
+      - main
+    
 
 jobs:
-  build-and-release:
-    runs-on: ubuntu-latest
+  test:
+    uses: ./.github/workflows/test.yml
 
+  lint:
+    uses: ./.github/workflows/lint.yml
+    needs: test
+
+  build:
+    uses: ./.github/workflows/build.yml
+    needs: lint
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -31,6 +48,6 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create-release.outputs.upload_url }}
-        asset_path: dist/  # Ruta a los artefactos generados
-        asset_name: ""  # Nombre del archivo (puedes especificar un nombre si es necesario)
-        asset_content_type: application/octet-stream  # Tipo de contenido del archivo
+        asset_path: dist/
+        asset_name: ""
+        asset_content_type: application/octet-stream
