@@ -80,7 +80,11 @@ All dependencies are automatically installed when you install the package via `p
 
 ## Installation
 
-Download the latest version from [Releases](https://github.com/jiep/spake2plus/releases).
+Download the latest version from [Releases](https://github.com/jiep/spake2plus/releases) and install with:
+
+```
+pip install spake2plus-<version>-py3-none-any.whl
+```
 
 ## Build from source
 
