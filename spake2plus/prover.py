@@ -15,6 +15,7 @@ import socket
 
 
 SALT_SIZE = 32
+BUFFER_SIZE = 1024
 
 
 class Prover(Role):
@@ -74,7 +75,7 @@ class Prover(Role):
         client_socket.sendall(X)
         self.logger.info(f"P -> V [{len(X)}]: X = {X.hex()}]")
 
-        Y = client_socket.recv(1024)
+        Y = client_socket.recv(BUFFER_SIZE)
         self.logger.info(f"P <- V [{len(Y)}]: Y = {Y.hex()}")
         Y = decode_point_uncompressed(Y, self.params.curve)
         self.logger.debug(f"P: Y = ({Y.x}, {Y.y})")
@@ -84,7 +85,7 @@ class Prover(Role):
         self.compute_key_schedule()
 
         confirmV, confirmP = self.confirm()
-        confirmVV = client_socket.recv(1024)
+        confirmVV = client_socket.recv(BUFFER_SIZE)
         self.logger.info(f"P <- V [{len(confirmV)}]: confirmV = {confirmV.hex()}")
 
         client_socket.sendall(confirmP)

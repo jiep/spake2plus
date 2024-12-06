@@ -1,35 +1,15 @@
 import argparse
 import logging
 from spake2plus.cli.banner import banner
-
-from spake2plus.ciphersuites import (
-    CiphersuiteP256_SHA256,
-    CiphersuiteP256_SHA512,
-    CiphersuiteP384_SHA256,
-    CiphersuiteP384_SHA512,
-    CiphersuiteP521_SHA512,
+from spake2plus.cli.constants import (
+    CIPHERSUITE_MAP,
+    CIPHERSUITE_COMPLETE_MAP,
+    DEFAULT_CIPHERSUITE,
 )
+
 from spake2plus.prover import Prover
 from spake2plus.verifier import Verifier
 from spake2plus.utils import decode_point_uncompressed
-
-CIPHERSUITE_MAP = {
-    "P256-SHA256": CiphersuiteP256_SHA256,
-    "P256-SHA512": CiphersuiteP256_SHA512,
-    "P384-SHA256": CiphersuiteP384_SHA256,
-    "P384-SHA512": CiphersuiteP384_SHA512,
-    "P521-SHA512": CiphersuiteP521_SHA512,
-}
-
-CIPHERSUITE_COMPLETE_MAP = {
-    "P256-SHA256": "SPAKE2+-P256-SHA256-HKDF-SHA256-HMAC-SHA256-Argon2id",
-    "P256-SHA512": "SPAKE2+-P256-SHA512-HKDF-SHA512-HMAC-SHA512-Argon2id",
-    "P384-SHA256": "SPAKE2+-P384-SHA256-HKDF-SHA256-HMAC-SHA256-Argon2id",
-    "P384-SHA512": "SPAKE2+-P384-SHA512-HKDF-SHA512-HMAC-SHA512-Argon2id",
-    "P521-SHA512": "SPAKE2+-P521-SHA512-HKDF-SHA512-HMAC-SHA512-Argon2id",
-}
-
-DEFAULT_CIPHERSUITE = list(CIPHERSUITE_MAP.keys())[0]
 
 
 class SPAKE2PlusCLI:
