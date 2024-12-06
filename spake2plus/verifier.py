@@ -8,6 +8,7 @@ import socket
 
 BUFFER_SIZE = 1024
 
+
 class Verifier(Role):
     def __init__(
         self,

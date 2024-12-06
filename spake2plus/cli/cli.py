@@ -1,7 +1,11 @@
 import argparse
 import logging
 from spake2plus.cli.banner import banner
-from spake2plus.cli.constants import CIPHERSUITE_MAP, CIPHERSUITE_COMPLETE_MAP, DEFAULT_CIPHERSUITE
+from spake2plus.cli.constants import (
+    CIPHERSUITE_MAP,
+    CIPHERSUITE_COMPLETE_MAP,
+    DEFAULT_CIPHERSUITE,
+)
 
 from spake2plus.prover import Prover
 from spake2plus.verifier import Verifier
