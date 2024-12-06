@@ -80,7 +80,11 @@ All dependencies are automatically installed when you install the package via `p
 
 ## Installation
 
-You can install this package locally using `pip`:
+Download the latest version from [Releases](https://github.com/jiep/spake2plus/releases).
+
+## Build from source
+
+You can install this package locally using `pip` upon cloning this repository:
 
 ```bash
 pip install -e .
