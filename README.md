@@ -173,13 +173,21 @@ options:
 ### Registration
 
 ```bash
-$ spake2plus registration --password superImporT4antPassWord! --idProver alice --idVerifier bob --ciphersuite P256-SHA256
+spake2plus registration --password superImporT4antPassWord! --idProver alice --idVerifier bob --ciphersuite P256-SHA256
+```
 
+<details>
+
+<summary>Show output</summary>
+
+```bash
 2024-12-01 14:06:51.789 [INFO] Ciphersuite: P256-SHA256
 2024-12-01 14:06:52.048 [INFO] w0 = 3bccdf7f0940907dac69758d327eb9c40c5a7f95ee63a80e042e5473ce789e76
 2024-12-01 14:06:52.048 [INFO] w1 = 59f7bce5c93c087e114d95b542f100124e1814be7f383c376a9a441045092a0b
 2024-12-01 14:06:52.048 [INFO] L  = 04c9b019fbe6d4e727dfd9cd831f3c36a6fec8b05972bed62d3b0493c8cfc2163dc739cda27dcb7aa6726008f7312281d9ffe61edc178af1f26a96a1a6dc6cfbc4
 ```
+
+</details>
 
 ### Verifier
 
