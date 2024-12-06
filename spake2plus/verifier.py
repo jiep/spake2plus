@@ -5,6 +5,7 @@ from tinyec.ec import Point
 
 import secrets
 import socket
+import sys
 
 BUFFER_SIZE = 1024
 
@@ -81,6 +82,11 @@ class Verifier(Role):
             server_socket.listen(1)
             self.logger.info(f"Verifier is listening on {self.host}:{self.port}...")
 
-            conn, _ = server_socket.accept()
-            with conn:
-                self.handle_client(conn)
+            try:
+                conn, _ = server_socket.accept()
+                with conn:
+                    self.handle_client(conn)
+            except KeyboardInterrupt:
+                self.logger.debug("V: Stopping server...")
+                self.logger.info("V: Exiting...")
+                sys.exit(0)
