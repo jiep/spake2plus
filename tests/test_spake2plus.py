@@ -1,3 +1,6 @@
+import pytest
+from spake2plus.exceptions import ConfirmingError, InvalidInputError
+from spake2plus.prover import Prover
 from spake2plus.spake2plus import SPAKE2PLUS
 from spake2plus.ciphersuites import (
     CiphersuiteP256_SHA256,
@@ -6,6 +9,8 @@ from spake2plus.ciphersuites import (
     CiphersuiteP384_SHA512,
     CiphersuiteP521_SHA512,
 )
+from spake2plus.utils import decode_point_uncompressed, encode_point_uncompressed
+from spake2plus.verifier import Verifier
 
 
 def test_p256():
@@ -152,3 +157,149 @@ def test_random():
     )
 
     assert protocol.prover.shared_key().hex() == protocol.verifier.shared_key().hex()
+
+
+def test_incorrect_message():
+
+    with pytest.raises(InvalidInputError):
+
+        ciphersuite = CiphersuiteP256_SHA256()
+        context = b"SPAKE2+-P256-SHA256-HKDF-SHA256-HMAC-SHA256 Random Values"
+        idProver = b"alice"
+        idVerifier = b"bob"
+        w0 = "bb8e1bbcf3c48f62c08db243652ae55d3e5586053fca77102994f23ad95491b3"
+        w1 = "7e945f34d78785b8a3ef44d0df5a1a97d6b3b460409a345ca7830387a74b1dba"
+        x = None
+        y = None
+
+        w0 = bytes.fromhex(w0)
+        w1 = bytes.fromhex(w1)
+        L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
+
+        prover = Prover(idProver, idVerifier, context, ciphersuite.params, w0, w1, None)
+        verifier = Verifier(
+            idProver, idVerifier, context, ciphersuite.params, w0, L, None
+        )
+        X = prover.init(x)
+        X_encoded = bytearray(encode_point_uncompressed(X, ciphersuite.params.curve))
+        X_encoded[5] = X_encoded[5] ^ 0x56  # modified message X
+        X = bytes(X_encoded)
+        X = decode_point_uncompressed(X, ciphersuite.params.curve)
+        Y = verifier.finish(X, y)
+
+
+def test_incorrect_message2():
+
+    with pytest.raises(InvalidInputError):
+
+        ciphersuite = CiphersuiteP256_SHA256()
+        context = b"SPAKE2+-P256-SHA256-HKDF-SHA256-HMAC-SHA256 Random Values"
+        idProver = b"alice"
+        idVerifier = b"bob"
+        w0 = "bb8e1bbcf3c48f62c08db243652ae55d3e5586053fca77102994f23ad95491b3"
+        w1 = "7e945f34d78785b8a3ef44d0df5a1a97d6b3b460409a345ca7830387a74b1dba"
+        x = None
+        y = None
+
+        w0 = bytes.fromhex(w0)
+        w1 = bytes.fromhex(w1)
+        L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
+
+        prover = Prover(idProver, idVerifier, context, ciphersuite.params, w0, w1, None)
+        verifier = Verifier(
+            idProver, idVerifier, context, ciphersuite.params, w0, L, None
+        )
+        X = prover.init(x)
+        Y = verifier.finish(X, y)
+
+        Y_encoded = bytearray(encode_point_uncompressed(Y, ciphersuite.params.curve))
+        Y_encoded[5] = Y_encoded[5] ^ 0x32  # modified message Y
+        Y = bytes(Y_encoded)
+        Y = decode_point_uncompressed(Y, ciphersuite.params.curve)
+
+        prover.finish(Y)
+
+
+def test_incorrect_message3():
+
+    with pytest.raises(ConfirmingError):
+
+        ciphersuite = CiphersuiteP256_SHA256()
+        context = b"SPAKE2+-P256-SHA256-HKDF-SHA256-HMAC-SHA256 Random Values"
+        idProver = b"alice"
+        idVerifier = b"bob"
+        w0 = "bb8e1bbcf3c48f62c08db243652ae55d3e5586053fca77102994f23ad95491b3"
+        w1 = "7e945f34d78785b8a3ef44d0df5a1a97d6b3b460409a345ca7830387a74b1dba"
+        x = None
+        y = None
+
+        w0 = bytes.fromhex(w0)
+        w1 = bytes.fromhex(w1)
+        L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
+
+        prover = Prover(idProver, idVerifier, context, ciphersuite.params, w0, w1, None)
+        verifier = Verifier(
+            idProver, idVerifier, context, ciphersuite.params, w0, L, None
+        )
+        X = prover.init(x)
+        Y = verifier.finish(X, y)
+
+        Y = bytes.fromhex(
+            "04835bd8437b2dd3bd920dcbb3aa81c72874e8bdb81aa76c3c2b99a7e9ca22ad397dd844c701eb77264d61f13926a5fc3730d100bb08e4935d770885392d29e1dd"
+        )
+        Y = decode_point_uncompressed(Y, ciphersuite.params.curve)
+
+        prover.finish(Y)
+
+        prover.compute_key_schedule()
+        verifier.compute_key_schedule()
+
+        confirmVV, confirmPV = verifier.confirm()
+        confirmVP, confirmPP = prover.confirm()
+
+        if not prover.check(confirmVV, confirmPV) or not verifier.check(
+            confirmVP, confirmPP
+        ):
+            raise ConfirmingError("error confirming")
+
+
+def test_incorrect_message4():
+
+    with pytest.raises(ConfirmingError):
+
+        ciphersuite = CiphersuiteP256_SHA256()
+        context = b"SPAKE2+-P256-SHA256-HKDF-SHA256-HMAC-SHA256 Random Values"
+        idProver = b"alice"
+        idVerifier = b"bob"
+        w0 = "bb8e1bbcf3c48f62c08db243652ae55d3e5586053fca77102994f23ad95491b3"
+        w1 = "7e945f34d78785b8a3ef44d0df5a1a97d6b3b460409a345ca7830387a74b1dba"
+        x = None
+        y = None
+
+        w0 = bytes.fromhex(w0)
+        w1 = bytes.fromhex(w1)
+        L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
+
+        prover = Prover(idProver, idVerifier, context, ciphersuite.params, w0, w1, None)
+        verifier = Verifier(
+            idProver, idVerifier, context, ciphersuite.params, w0, L, None
+        )
+        X = prover.init(x)
+        X = bytes.fromhex(
+            "04835bd8437b2dd3bd920dcbb3aa81c72874e8bdb81aa76c3c2b99a7e9ca22ad397dd844c701eb77264d61f13926a5fc3730d100bb08e4935d770885392d29e1dd"
+        )
+        X = decode_point_uncompressed(X, ciphersuite.params.curve)
+        Y = verifier.finish(X, y)
+
+        prover.finish(Y)
+
+        prover.compute_key_schedule()
+        verifier.compute_key_schedule()
+
+        confirmVV, confirmPV = verifier.confirm()
+        confirmVP, confirmPP = prover.confirm()
+
+        if not prover.check(confirmVV, confirmPV) or not verifier.check(
+            confirmVP, confirmPP
+        ):
+            raise ConfirmingError("error confirming")
