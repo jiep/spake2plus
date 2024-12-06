@@ -1,16 +1,16 @@
 import pytest
-from spake2plus.exceptions import ConfirmingError, InvalidInputError
-from spake2plus.prover import Prover
-from spake2plus.spake2plus import SPAKE2PLUS
-from spake2plus.ciphersuites import (
+from spake2plus.exceptions.exceptions import ConfirmingError, InvalidInputError
+from spake2plus.roles.prover import Prover
+from spake2plus.protocol.spake2plus import SPAKE2PLUS
+from spake2plus.ciphersuites.ciphersuites import (
     CiphersuiteP256_SHA256,
     CiphersuiteP256_SHA512,
     CiphersuiteP384_SHA256,
     CiphersuiteP384_SHA512,
     CiphersuiteP521_SHA512,
 )
-from spake2plus.utils import decode_point_uncompressed, encode_point_uncompressed
-from spake2plus.verifier import Verifier
+from spake2plus.utils.utils import decode_point_uncompressed, encode_point_uncompressed
+from spake2plus.roles.verifier import Verifier
 
 
 def test_p256():

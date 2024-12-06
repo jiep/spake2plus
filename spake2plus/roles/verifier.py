@@ -1,6 +1,6 @@
-from spake2plus.exceptions import InvalidInputError
-from spake2plus.role import Role
-from spake2plus.utils import decode_point_uncompressed, encode_point_uncompressed
+from spake2plus.exceptions.exceptions import InvalidInputError
+from spake2plus.roles.role import Role
+from spake2plus.utils.utils import decode_point_uncompressed, encode_point_uncompressed
 from tinyec.ec import Point
 
 import secrets
