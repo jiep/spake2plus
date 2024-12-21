@@ -3,12 +3,12 @@ from ecpy.curves import Curve
 
 
 def decode_point_uncompressed(data: bytes, curve: Curve) -> tuple:
-    
+
     return curve.decode_point(data)
 
 
 def encode_point_uncompressed(point, curve):
-    
+
     return bytes(curve.encode_point(point))
 
 
