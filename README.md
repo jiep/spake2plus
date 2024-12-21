@@ -265,7 +265,7 @@ spake2plus prover --idProver alice --idVerifier bob --context KeyExchange --w0 3
 | `P521-SHA512`         | P-521        | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
 | `P521-SHA512`         | P-521        | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
 | `Edwards25519-SHA256` | Edwards25519 | SHA256 [RFC6234]  | HKDF-SHA256 [RFC5869] | HMAC-SHA256 [RFC2104] | Argon2id [RFC9106] |
-| `Edwards448-SHA256`   | Edwards448   | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
+| `Edwards448-SHA512`   | Edwards448   | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
 
 <details>
 
