@@ -9,7 +9,7 @@ from spake2plus.ciphersuites.ciphersuites import (
     CiphersuiteP384_SHA512,
     CiphersuiteP521_SHA512,
     CiphersuiteEdwards25519_SHA256,
-    CiphersuiteEdwards448_SHA512
+    CiphersuiteEdwards448_SHA512,
 )
 from spake2plus.utils.utils import decode_point_uncompressed, encode_point_uncompressed
 from spake2plus.roles.verifier import Verifier
@@ -138,7 +138,7 @@ def test_p521():
 
     assert protocol.prover.shared_key().hex() == K_shared
     assert protocol.verifier.shared_key().hex() == K_shared
-    
+
 
 def test_edwards25519():
     ciphersuite = CiphersuiteEdwards25519_SHA256()
@@ -163,8 +163,7 @@ def test_edwards25519():
 
     assert protocol.prover.shared_key().hex() == K_shared
     assert protocol.verifier.shared_key().hex() == K_shared
-    
-    
+
 
 def test_edwards448():
     ciphersuite = CiphersuiteEdwards448_SHA512()
@@ -189,7 +188,7 @@ def test_edwards448():
 
     assert protocol.prover.shared_key().hex() == K_shared
     assert protocol.verifier.shared_key().hex() == K_shared
-    
+
 
 def test_random_nist_curve():
     ciphersuite = CiphersuiteP256_SHA256()
@@ -231,8 +230,8 @@ def test_random_edwards25519():
     )
 
     assert protocol.prover.shared_key().hex() == protocol.verifier.shared_key().hex()
-    
-    
+
+
 def test_random_edwards448():
     ciphersuite = CiphersuiteEdwards448_SHA512()
     context = b"SPAKE2+-Edwards448-SHA512-HKDF-SHA512-HMAC-SHA512 Random Values"
@@ -252,7 +251,7 @@ def test_random_edwards448():
     )
 
     assert protocol.prover.shared_key().hex() == protocol.verifier.shared_key().hex()
-    
+
 
 def test_incorrect_message():
 

@@ -48,7 +48,7 @@ class Ciphersuite:
                     curve,
                 )
                 h = 1
-                
+
             case "Edwards25519":
                 curve = Curve.get_curve("Ed25519")
                 M = Point(
@@ -62,7 +62,7 @@ class Ciphersuite:
                     curve,
                 )
                 h = 8
-                
+
             case "Edwards448":
                 curve = Curve.get_curve("Ed448")
                 M = Point(
@@ -128,13 +128,13 @@ class CiphersuiteP521_SHA512(Ciphersuite):
 
     def __init__(self):
         super().__init__("P-521", "SHA-512")
-        
+
 
 class CiphersuiteEdwards25519_SHA256(Ciphersuite):
 
     def __init__(self):
         super().__init__("Edwards25519", "SHA-256")
-        
+
 
 class CiphersuiteEdwards448_SHA512(Ciphersuite):
 

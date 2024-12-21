@@ -5,7 +5,7 @@ from spake2plus.ciphersuites.ciphersuites import (
     CiphersuiteP384_SHA512,
     CiphersuiteP521_SHA512,
     CiphersuiteEdwards25519_SHA256,
-    CiphersuiteEdwards448_SHA512
+    CiphersuiteEdwards448_SHA512,
 )
 
 CIPHERSUITE_MAP = {
