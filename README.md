@@ -248,7 +248,7 @@ spake2plus prover --idProver alice --idVerifier bob --context KeyExchange --w0 3
 > [!NOTE]  
 > If not specified ciphersuite, `P256-SHA256` is used by default.
 >
-> Ciphersuites allowed: `P256-SHA256`, `P256-SHA512`, `P384-SHA256`, `P384-SHA512`, and `P521-SHA512`.
+> Ciphersuites allowed: `P256-SHA256`, `P256-SHA512`, `P384-SHA256`, `P384-SHA512`, `P521-SHA512`, `Edwards25519-SHA256`, and `Edwards448-SHA512`.
 
 > [!WARNING]  
 > `idProvider`, `idVerifier`, `context`  must be the identical for `Prover` and `Verifier`! 
@@ -256,13 +256,16 @@ spake2plus prover --idProver alice --idVerifier bob --context KeyExchange --w0 3
 
 ## Ciphersuites
 
-| Ciphersuite     | G            | Hash              | KDF                   | MAC                   | PBKDF              |
-|-----------------|--------------|-------------------|-----------------------|-----------------------|--------------------|
-| `P256-SHA256`   | P-256        | SHA256 [RFC6234]  | HKDF-SHA256 [RFC5869] | HMAC-SHA256 [RFC2104] | Argon2id [RFC9106] |
-| `P256-SHA512`   | P-256        | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
-| `P384-SHA256`   | P-384        | SHA256 [RFC6234]  | HKDF-SHA256 [RFC5869] | HMAC-SHA256 [RFC2104] | Argon2id [RFC9106] |
-| `P384-SHA512`   | P-384        | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
-| `P521-SHA512`   | P-521        | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
+| Ciphersuite           | G            | Hash              | KDF                   | MAC                   | PBKDF              |
+|-----------------------|--------------|-------------------|-----------------------|-----------------------|--------------------|
+| `P256-SHA256`         | P-256        | SHA256 [RFC6234]  | HKDF-SHA256 [RFC5869] | HMAC-SHA256 [RFC2104] | Argon2id [RFC9106] |
+| `P256-SHA512`         | P-256        | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
+| `P384-SHA256`         | P-384        | SHA256 [RFC6234]  | HKDF-SHA256 [RFC5869] | HMAC-SHA256 [RFC2104] | Argon2id [RFC9106] |
+| `P384-SHA512`         | P-384        | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
+| `P521-SHA512`         | P-521        | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
+| `P521-SHA512`         | P-521        | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
+| `Edwards25519-SHA256` | Edwards25519 | SHA256 [RFC6234]  | HKDF-SHA256 [RFC5869] | HMAC-SHA256 [RFC2104] | Argon2id [RFC9106] |
+| `Edwards448-SHA256`   | Edwards448   | SHA512 [RFC6234]  | HKDF-SHA512 [RFC5869] | HMAC-SHA512 [RFC2104] | Argon2id [RFC9106] |
 
 <details>
 
@@ -336,6 +339,34 @@ spake2plus prover --idProver alice --idVerifier bob --context KeyExchange --w0 3
   N = 0200c7924b9ec017f3094562894336a53c50167ba8c5963876880542bc669e494b2532d76c5b53dfb349fdf69154b9e0048c58a42e8ed04cef052a3bc349d95575cd25
 
   seed: 1.3.132.0.35 point generation seed (N)
+  ```
+
+- `Edwards25519`
+
+  ```
+  M = d048032c6ea0b6d697ddc2e86bda85a33adac920f1bf18e1b0c6d166a5cecdaf
+
+  seed: edwards25519 point generation seed (M)
+  ```
+
+  ```
+  N = d3bfb518f44f3430f29d0c92af503865a1ed3281dc69b35dd868ba85f886c4ab
+
+  seed: edwards25519 point generation seed (N)
+  ```
+
+- `Edwards448`
+
+  ```
+  M = b6221038a775ecd007a4e4dde39fd76ae91d3cf0cc92be8f0c2fa6d6b66f9a12942f5a92646109152292464f3e63d354701c7848d9fc3b8880
+
+  seed: edwards448 point generation seed (M)
+  ```
+
+  ```
+  N = 6034c65b66e4cd7a49b0edec3e3c9ccc4588afd8cf324e29f0a84a072531c4dbf97ff9af195ed714a689251f08f8e06e2d1f24a0ffc0146600
+
+  seed: edwards448 point generation seed (N)
   ```
 
 </details>
