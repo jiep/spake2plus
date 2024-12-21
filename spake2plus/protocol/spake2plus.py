@@ -3,7 +3,7 @@ from spake2plus.roles.prover import Prover
 from spake2plus.roles.verifier import Verifier
 from spake2plus.exceptions.exceptions import ConfirmingError
 
-from tinyec.ec import Point
+from ecpy.curves import Point
 
 
 class SPAKE2PLUS:

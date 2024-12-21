@@ -74,7 +74,7 @@ sequenceDiagram
 This package requires the following dependencies:
 
 * [`cryptography`](https://pypi.org/project/cryptography/)
-* [`tinyec`](https://pypi.org/project/tinyec/)
+* [`ecpy`](https://pypi.org/project/ecpy/)
 
 All dependencies are automatically installed when you install the package via `pip`.
 

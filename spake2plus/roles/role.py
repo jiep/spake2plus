@@ -1,6 +1,6 @@
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
-from tinyec.ec import Point, Inf
+from ecpy.curves import Point
 
 from spake2plus.protocol.parameters import Parameters
 from spake2plus.utils.utils import encode_point_uncompressed, get_len, mac
@@ -91,8 +91,8 @@ class Role:
         return self.confirmV == confirmV and self.confirmP == confirmP
 
     def is_in_subgroup(self, X: Point):
-        infinity = Inf(self.params.curve)
-        check1 = X.on_curve
-        check1 = check1 and (infinity == self.params.curve.field.n * X)
+        infinity = self.params.curve.infinity
+        check1 = self.params.curve.is_on_curve(X)
+        check1 = check1 and (infinity == self.params.curve.order * X)
         check1 = check1 and (infinity != self.params.h * X)
         return check1

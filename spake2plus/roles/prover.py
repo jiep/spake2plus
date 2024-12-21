@@ -38,7 +38,7 @@ class Prover(Role):
 
     def init(self, x=None):
         if not x:
-            x = secrets.randbelow(self.params.curve.field.n)
+            x = secrets.randbelow(self.params.curve.order)
         self.x = x
         self.X = (
             self.x * self.params.P
@@ -109,7 +109,7 @@ class Prover(Role):
         )
 
         k = 64
-        output_length = 2 * math.ceil(math.log(self.params.curve.field.n, 2) + k)
+        output_length = 2 * math.ceil(math.log(self.params.curve.order, 2) + k)
 
         kdf = Argon2id(
             salt=secrets.token_bytes(SALT_SIZE),
@@ -127,8 +127,8 @@ class Prover(Role):
         w0s = int.from_bytes(derived_key[:half_length], "big")
         w1s = int.from_bytes(derived_key[half_length:], "big")
 
-        w0 = w0s % self.params.curve.field.n
-        w1 = w1s % self.params.curve.field.n
+        w0 = w0s % self.params.curve.order
+        w1 = w1s % self.params.curve.order
         self.w0 = w0.to_bytes((w0.bit_length() + 7) // 8, "big")
         self.w1 = w1.to_bytes((w1.bit_length() + 7) // 8, "big")
         self.L = int.from_bytes(self.w1, byteorder="big") * self.params.P
