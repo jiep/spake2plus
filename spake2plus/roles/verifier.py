@@ -1,7 +1,7 @@
 from spake2plus.exceptions.exceptions import InvalidInputError
 from spake2plus.roles.role import Role
 from spake2plus.utils.utils import decode_point_uncompressed, encode_point_uncompressed
-from tinyec.ec import Point
+from ecpy.curves import Point
 
 import secrets
 import socket
@@ -28,7 +28,7 @@ class Verifier(Role):
 
     def finish(self, X, y=None):
         if not y:
-            y = secrets.randbelow(self.params.curve.field.n)
+            y = secrets.randbelow(self.params.curve.order)
 
         if not self.is_in_subgroup(X):
             raise InvalidInputError("invalid input")

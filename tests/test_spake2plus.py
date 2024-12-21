@@ -8,6 +8,8 @@ from spake2plus.ciphersuites.ciphersuites import (
     CiphersuiteP384_SHA256,
     CiphersuiteP384_SHA512,
     CiphersuiteP521_SHA512,
+    CiphersuiteEdwards25519_SHA256,
+    CiphersuiteEdwards448_SHA512,
 )
 from spake2plus.utils.utils import decode_point_uncompressed, encode_point_uncompressed
 from spake2plus.roles.verifier import Verifier
@@ -138,13 +140,105 @@ def test_p521():
     assert protocol.verifier.shared_key().hex() == K_shared
 
 
-def test_random():
+def test_edwards25519():
+    ciphersuite = CiphersuiteEdwards25519_SHA256()
+    context = b"SPAKE2+-Edwards25519-SHA256-HKDF-SHA256-HMAC-SHA256 Test Vectors"
+    idProver = b"client"
+    idVerifier = b"server"
+    w0 = "0deebbf7a7289efe7c2ec435ac7181a527b57294bd02b90feda36b77c3a149b5"
+    w1 = "0391b2028edb047df9446bbb3385c7bc0ef716d0792b8bd98d23b1777e7805f3"
+    x = "4eaffe97749551261dd45cc0018622dc9339ad2c8cf813272a5b1767b776b05f"
+    y = "df49d1a53a4cd75aee2a8dfb2ac0eec8480df65ebd5fe35c4f915fcccb7c61a5"
+    K_shared = "0067c7851018685d8d061e5c0ff7c4b7ebd3fd90b93890198783e9d57305788b"
+
+    w0 = bytes.fromhex(w0)
+    w1 = bytes.fromhex(w1)
+    L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
+    x = int(x, 16)
+    y = int(y, 16)
+
+    protocol = SPAKE2PLUS(
+        ciphersuite.params, idProver, idVerifier, w0, w1, L, context, x, y
+    )
+
+    assert protocol.prover.shared_key().hex() == K_shared
+    assert protocol.verifier.shared_key().hex() == K_shared
+
+
+def test_edwards448():
+    ciphersuite = CiphersuiteEdwards448_SHA512()
+    context = b"SPAKE2+-Edwards448-SHA512-HKDF-SHA512-HMAC-SHA512 Test Vectors"
+    idProver = b"client"
+    idVerifier = b"server"
+    w0 = "37e969f792a11b2e2d23eaf2a6b4ce734e5377c4271bcd1d5e07d202365ad2d2bcf757a42379afdd18188a71327c35dd8f6011fc9ed8440b"
+    w1 = "1c48d2c4646af3bdd95778328666eb1dfc0e59ac11ac4b442cdc10e9d5d54cc7f7d0e36dd1f47c0e4b4b2fd4db6145cf1885f23a5246d48b"
+    x = "9fc7d75d5f8a28eeab15394b379fa044e4a43cda3784089a46697dc7e4ec939c1c65ed03724211bbf133ca9900bc0c8b3d2c50bc7cb8ff71f0"
+    y = "248254ba77c13649675d14ff08537b22e9f5a415e93c6ed4645eac24a01013cf3a6e83d4711f1a14b0308dbe069d4378413c844045d11a7420"
+    K_shared = "2a54e4100107666990b37659160e3e196523648524f3b52c95659e31de49d277a2deb64b0f4fd5adce7167f56226379c86e1cbee8e0dd4135b599505389fec3a"
+
+    w0 = bytes.fromhex(w0)
+    w1 = bytes.fromhex(w1)
+    L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
+    x = int(x, 16)
+    y = int(y, 16)
+
+    protocol = SPAKE2PLUS(
+        ciphersuite.params, idProver, idVerifier, w0, w1, L, context, x, y
+    )
+
+    assert protocol.prover.shared_key().hex() == K_shared
+    assert protocol.verifier.shared_key().hex() == K_shared
+
+
+def test_random_nist_curve():
     ciphersuite = CiphersuiteP256_SHA256()
     context = b"SPAKE2+-P256-SHA256-HKDF-SHA256-HMAC-SHA256 Random Values"
     idProver = b"alice"
     idVerifier = b"bob"
     w0 = "bb8e1bbcf3c48f62c08db243652ae55d3e5586053fca77102994f23ad95491b3"
     w1 = "7e945f34d78785b8a3ef44d0df5a1a97d6b3b460409a345ca7830387a74b1dba"
+    x = None
+    y = None
+
+    w0 = bytes.fromhex(w0)
+    w1 = bytes.fromhex(w1)
+    L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
+
+    protocol = SPAKE2PLUS(
+        ciphersuite.params, idProver, idVerifier, w0, w1, L, context, x, y
+    )
+
+    assert protocol.prover.shared_key().hex() == protocol.verifier.shared_key().hex()
+
+
+def test_random_edwards25519():
+    ciphersuite = CiphersuiteEdwards25519_SHA256()
+    context = b"SPAKE2+-Edwards25519-SHA256-HKDF-SHA256-HMAC-SHA256 Random Values"
+    idProver = b"alice"
+    idVerifier = b"bob"
+    w0 = "0deebbf7a7289efe7c2ec435ac7181a527b57294bd02b90feda36b77c3a149b5"
+    w1 = "0391b2028edb047df9446bbb3385c7bc0ef716d0792b8bd98d23b1777e7805f3"
+    x = None
+    y = None
+
+    w0 = bytes.fromhex(w0)
+    w1 = bytes.fromhex(w1)
+    L = int.from_bytes(w1, byteorder="big") * ciphersuite.params.P
+
+    protocol = SPAKE2PLUS(
+        ciphersuite.params, idProver, idVerifier, w0, w1, L, context, x, y
+    )
+
+    assert protocol.prover.shared_key().hex() == protocol.verifier.shared_key().hex()
+
+
+def test_random_edwards448():
+    ciphersuite = CiphersuiteEdwards448_SHA512()
+    context = b"SPAKE2+-Edwards448-SHA512-HKDF-SHA512-HMAC-SHA512 Random Values"
+    idProver = b"alice"
+    idVerifier = b"bob"
+    w0 = "37e969f792a11b2e2d23eaf2a6b4ce734e5377c4271bcd1d5e07d202365ad2d2bcf757a42379afdd18188a71327c35dd8f6011fc9ed8440b"
+    w1 = "1c48d2c4646af3bdd95778328666eb1dfc0e59ac11ac4b442cdc10e9d5d54cc7f7d0e36dd1f47c0e4b4b2fd4db6145cf1885f23a5246d48b"
     x = None
     y = None
 
