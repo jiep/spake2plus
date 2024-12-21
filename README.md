@@ -124,9 +124,8 @@ options:
 The `Prover` computes the values `w0` and `w1`, as well as the registration record `L`. `w0` and `w1` are derived by hashing the password with the identities of the two participants. `w0` and the record `L` are then shared with the `Verifier`. 
 
 ```bash
-usage: spake2plus registration [-h] --password PASSWORD --idProver IDPROVER
-                               --idVerifier IDVERIFIER
-                               [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}]
+usage: spake2plus registration [-h] --password PASSWORD --idProver IDPROVER --idVerifier IDVERIFIER
+                               [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512,Edwards25519-SHA256,Edwards448-SHA512}]
 
 options:
   -h, --help            show this help message and exit
@@ -134,16 +133,15 @@ options:
   --idProver IDPROVER   Prover's identity
   --idVerifier IDVERIFIER
                         Verifier's identity
-  --ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}
+  --ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512,Edwards25519-SHA256,Edwards448-SHA512}
                         Ciphersuite to use (default: P256-SHA256)
 ```
 
 ### Verifier
 
 ```bash
-usage: spake2plus verifier [-h] --idProver IDPROVER --idVerifier IDVERIFIER
-                           --context CONTEXT --w0 W0 --L L
-                           [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}]
+usage: spake2plus verifier [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context CONTEXT --w0 W0 --L L
+                           [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512,Edwards25519-SHA256,Edwards448-SHA512}]
 
 options:
   -h, --help            show this help message and exit
@@ -153,16 +151,15 @@ options:
   --context CONTEXT     Protocol context
   --w0 W0               Value for w0 as hexadecimal string
   --L L                 Value for L as hexadecimal string
-  --ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}
+  --ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512,Edwards25519-SHA256,Edwards448-SHA512}
                         Ciphersuite to use (default: P256-SHA256)
 ```
 
 ### Prover
 
 ```bash
-usage: spake2plus prover [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context
-                         CONTEXT --w0 W0 --w1 W1
-                         [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}]
+usage: spake2plus prover [-h] --idProver IDPROVER --idVerifier IDVERIFIER --context CONTEXT --w0 W0 --w1 W1
+                         [--ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512,Edwards25519-SHA256,Edwards448-SHA512}]
 
 options:
   -h, --help            show this help message and exit
@@ -172,7 +169,7 @@ options:
   --context CONTEXT     Protocol context
   --w0 W0               Value for w0 as hexadecimal string
   --w1 W1               Value for w1 as hexadecimal string
-  --ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512}
+  --ciphersuite {P256-SHA256,P256-SHA512,P384-SHA256,P384-SHA512,P521-SHA512,Edwards25519-SHA256,Edwards448-SHA512}
                         Ciphersuite to use (default: P256-SHA256)
 ```
 
