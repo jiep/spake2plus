@@ -1,2 +1,2 @@
-cryptography==44.0.1
+cryptography==44.0.2
 ecpy==1.2.5
