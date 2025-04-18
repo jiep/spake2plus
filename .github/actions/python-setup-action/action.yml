@@ -23,9 +23,5 @@ runs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -r requirements-dev.txt
-      shell: bash
-
-    - name: Install build tools
-      run: |
-        pip install build twine
+        pip install -r requirements-build.txt
       shell: bash
