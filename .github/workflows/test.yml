@@ -15,7 +15,7 @@ jobs:
         python-version: ["3.12", "3.13"]
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
     - name: Python Setup
       uses: ./.github/actions/python-setup-action
@@ -23,7 +23,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Run pytest
-      uses: quantco/pytest-action@v2
+      uses: quantco/pytest-action@2b678dd0595fa09fe38b44a479e3078eee99e2ae # v2.3.0
       with:
         verbose: true
         emoji: true
