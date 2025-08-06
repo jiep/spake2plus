@@ -1,4 +1,6 @@
 name: CI, Build, Test, Lint, and Release
+permissions:
+  contents: read
 
 on:
   push:
