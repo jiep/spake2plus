@@ -23,7 +23,7 @@ jobs:
         python-version: '3.12'
 
     - name: Check code formatting with Black
-      run: black --check .
+      run: black --check . --target-version=py312
 
     - name: Check types with mypy
       run: mypy .
