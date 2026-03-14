@@ -28,6 +28,7 @@ jobs:
       run: python -m pytest --junit-xml=${{ runner.temp }}/test-results.xml
 
     - name: Parse pytest results
+      if: always()
       uses: pmeier/pytest-results-action@20b595761ba9bf89e115e875f8bc863f913bc8ad # v0.7.2
       with:
         path: ${{ runner.temp }}/test-results.xml
