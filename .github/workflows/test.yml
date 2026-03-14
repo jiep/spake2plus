@@ -25,12 +25,12 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Run pytest
-      run: python -m pytest --junit-xml=/tmp/test-results.xml
+      run: python -m pytest --junit-xml=${{ runner.temp }}/test-results.xml
 
     - name: Parse pytest results
       uses: pmeier/pytest-results-action@20b595761ba9bf89e115e875f8bc863f913bc8ad # v0.7.2
       with:
-        path: /tmp/test-results.xml
+        path: ${{ runner.temp }}/test-results.xml
         summary: true
         display-options: fEX
         fail-on-empty: true
