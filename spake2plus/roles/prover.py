@@ -13,7 +13,6 @@ from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
 import secrets
 import socket
 
-
 SALT_SIZE = 32
 BUFFER_SIZE = 1024
 
