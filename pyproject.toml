@@ -9,7 +9,7 @@ authors = [
 ]
 description = "A simple implementation of SPAKE2+ protocol"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 keywords = ["cryptography", "spake2plus"]
 license = "MIT"
 license-files = ["LICENSE"]
