@@ -8,41 +8,68 @@ on:
       - "v*"
 
 jobs:
+  precheck:
+    runs-on: ubuntu-latest
+    outputs:
+      create_release: ${{ steps.release_check.outputs.create_release }}
+    steps:
+    - name: Check if release exists
+      id: release_check
+      env:
+        GH_TOKEN: ${{ github.token }}
+        REPO: ${{ github.repository }}
+        TAG: ${{ github.ref_name }}
+      run: |
+        if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+          echo "Release $TAG already exists. Skipping expensive jobs."
+          echo "create_release=false" >> "$GITHUB_OUTPUT"
+        else
+          echo "create_release=true" >> "$GITHUB_OUTPUT"
+        fi
+
   test:
+    needs: precheck
+    if: needs.precheck.outputs.create_release == 'true'
     uses: ./.github/workflows/test.yml
 
   lint:
+    if: needs.precheck.outputs.create_release == 'true'
     uses: ./.github/workflows/lint.yml
-    needs: test
+    needs:
+      - precheck
+      - test
 
   build:
+    if: needs.precheck.outputs.create_release == 'true'
     uses: ./.github/workflows/wheel.yml
-    needs: lint
+    needs:
+      - precheck
+      - lint
 
   release:
+    if: needs.precheck.outputs.create_release == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
       id-token: write
       attestations: write
-    needs: build
+    needs:
+      - precheck
+      - build
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-    - name: Python Setup and Install Dependencies
-      uses: ./.github/actions/python-setup-action
+    - name: Download built wheel artifact
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
       with:
-        python-version: "3.12"
-
-    - name: Build the package
-      run: python -m build
+        name: wheel-package
+        path: dist
 
     - name: Create GitHub Release
-      uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd # v1.21.0
-      with:
-        artifacts: "dist/*"
-        generateReleaseNotes: true
+      env:
+        GH_TOKEN: ${{ github.token }}
+        REPO: ${{ github.repository }}
+        TAG: ${{ github.ref_name }}
+      run: |
+        gh release create "$TAG" dist/* --repo "$REPO" --verify-tag --title "$TAG" --generate-notes
 
     - name: Generate attestation
       uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
